@@ -1,0 +1,67 @@
+/* Auto-generated Theme CSS - 2025-06-11 15:18:46 */
+        
+:root {
+    --primary-color: #0D9488;
+    --gradient-start: #14B8A6;
+    --gradient-end: #5EEAD4;
+}
+
+.bg-gradient-custom {
+    background-color: #0D9488 !important;
+}
+
+.btn-custom {
+    background-color: #0D9488 !important;
+    border-color: #0D9488 !important;
+}
+
+.btn-custom:hover {
+    background-color: #0D9488 !important;
+    border-color: #0D9488 !important;
+    opacity: 0.9;
+}
+
+.btn-custom:focus, .btn-custom:active {
+    background-color: #0D9488 !important;
+    border-color: #0D9488 !important;
+    box-shadow: 0 0 0 0.2rem rgba(13, 148, 136, 0.25);
+}
+
+/* Sidebar Gradient */
+.sidebar.bg-gradient-custom {
+    background: linear-gradient(135deg, #0D9488 0%, #14B8A6 100%) !important;
+}
+
+/* Footer Gradient */
+.sticky-footer {
+    background: linear-gradient(135deg, #14B8A6 0%, #5EEAD4 100%) !important;
+}
+
+/* Scroll to top button */
+.scroll-to-top {
+    background: linear-gradient(135deg, #14B8A6, #5EEAD4) !important;
+}
+
+/* Additional theme elements */
+.text-primary {
+    color: #0D9488 !important;
+}
+
+.border-primary {
+    border-color: #0D9488 !important;
+}
+
+/* Progress bars */
+.progress-bar {
+    background-color: #0D9488 !important;
+}
+
+/* Links */
+a {
+    color: #0D9488;
+}
+
+a:hover {
+    color: #0D9488;
+    opacity: 0.8;
+}

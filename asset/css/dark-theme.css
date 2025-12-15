@@ -1,0 +1,28 @@
+/* ========== DARK THEME - FULL GRAYSCALE (ดำ-เทา-ขาว) ========== */
+
+/* กลับสีทั้งหมดเป็น Dark Mode + Grayscale */
+html {
+    filter: invert(1) hue-rotate(180deg) grayscale(100%) !important;
+    background-color: #9C9C9C !important;
+}
+
+/* รูปภาพ - แค่ Grayscale ไม่ต้องกลับสี */
+img, video, picture, canvas, svg {
+    filter: invert(1) hue-rotate(180deg) grayscale(50%) 
+            brightness(1.0) contrast(0.85) !important;
+}
+
+/* Google Maps - Grayscale */
+iframe[src*="google.com/maps"] {
+    filter: invert(1) hue-rotate(180deg) grayscale(100%) !important;
+}
+
+::-webkit-scrollbar {
+    background-color: #9C9C9C;  /* grey61 */
+}
+::-webkit-scrollbar-thumb {
+    background-color: #B5B5B5;  /* grey71 */
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #CFCFCF;  /* gray81 */
+}

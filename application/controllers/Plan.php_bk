@@ -1,0 +1,417 @@
+<?php
+// ===================================================================
+// application/controllers/Plan.php - Plan Controller
+// ===================================================================
+defined('BASEPATH') OR exit('No direct script access allowed');
+require_once(APPPATH . 'core/Base_Frontend_Controller.php');
+
+class Plan extends Base_Frontend_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    // === Plan Progress ===
+    public function progress()
+    {
+        $data = $this->get_common_data();
+        $data['query'] = $this->plan_progress_model->plan_progress_frontend();
+        $this->load_views('plan_progress', $data);
+    }
+
+    public function progress_detail($plan_progress_id)
+    {
+        $data = $this->get_common_data();
+        $this->plan_progress_model->increment_view($plan_progress_id);
+        $data['rsData'] = $this->plan_progress_model->read($plan_progress_id);
+
+        if (!$data['rsData']) {
+            $this->show_404_page();
+            return;
+        }
+
+        $data['rsPdf'] = $this->plan_progress_model->read_pdf($plan_progress_id);
+        $data['rsDoc'] = $this->plan_progress_model->read_doc($plan_progress_id);
+        $data['rsImg'] = $this->plan_progress_model->read_img($plan_progress_id);
+
+        $this->load_views('plan_progress_detail', $data);
+    }
+
+    public function increment_download_progress($plan_progress_file_id)
+    {
+        $this->plan_progress_model->increment_download_plan_progress($plan_progress_file_id);
+    }
+
+    // === Plan PDL ===
+    public function pdl()
+    {
+        $data = $this->get_common_data();
+        $data['query'] = $this->plan_pdl_model->plan_pdl_frontend_list();
+        $this->load_views('plan_pdl', $data);
+    }
+
+    public function pdl_detail($plan_pdl_id)
+    {
+        $data = $this->get_common_data();
+        $this->plan_pdl_model->increment_view($plan_pdl_id);
+        $data['rsData'] = $this->plan_pdl_model->read($plan_pdl_id);
+
+        if (!$data['rsData']) {
+            $this->show_404_page();
+            return;
+        }
+
+        $data['rsPdf'] = $this->plan_pdl_model->read_pdf($plan_pdl_id);
+        $data['rsDoc'] = $this->plan_pdl_model->read_doc($plan_pdl_id);
+        $data['rsImg'] = $this->plan_pdl_model->read_img($plan_pdl_id);
+
+        $this->load_views('plan_pdl_detail', $data);
+    }
+
+    public function increment_download_pdl($plan_pdl_file_id)
+    {
+        $this->plan_pdl_model->increment_download_plan_pdl($plan_pdl_file_id);
+    }
+
+    // === Plan PC3Y ===
+    public function pc3y()
+    {
+        $data = $this->get_common_data();
+        $data['query'] = $this->plan_pc3y_model->plan_pc3y_frontend_list();
+        $this->load_views('plan_pc3y', $data);
+    }
+
+    public function pc3y_detail($pc3y_id)
+    {
+        $data = $this->get_common_data();
+        $this->plan_pc3y_model->increment_view($pc3y_id);
+        $data['rsData'] = $this->plan_pc3y_model->read($pc3y_id);
+
+        if (!$data['rsData']) {
+            $this->show_404_page();
+            return;
+        }
+
+        $data['rsPdf'] = $this->plan_pc3y_model->read_pdf($pc3y_id);
+        $data['rsDoc'] = $this->plan_pc3y_model->read_doc($pc3y_id);
+        $data['rsImg'] = $this->plan_pc3y_model->read_img($pc3y_id);
+
+        $this->load_views('plan_pc3y_detail', $data);
+    }
+
+    public function increment_download_pc3y($pc3y_file_id)
+    {
+        $this->plan_pc3y_model->increment_download_plan_pc3y($pc3y_file_id);
+    }
+
+    // === Plan PDS3Y ===
+    public function pds3y()
+    {
+        $data = $this->get_common_data();
+        $data['query'] = $this->plan_pds3y_model->plan_pds3y_frontend_list();
+        $this->load_views('plan_pds3y', $data);
+    }
+
+    public function pds3y_detail($plan_pds3y_id)
+    {
+        $data = $this->get_common_data();
+        $this->plan_pds3y_model->increment_view($plan_pds3y_id);
+        $data['rsData'] = $this->plan_pds3y_model->read($plan_pds3y_id);
+
+        if (!$data['rsData']) {
+            $this->show_404_page();
+            return;
+        }
+
+        $data['rsPdf'] = $this->plan_pds3y_model->read_pdf($plan_pds3y_id);
+        $data['rsDoc'] = $this->plan_pds3y_model->read_doc($plan_pds3y_id);
+        $data['rsImg'] = $this->plan_pds3y_model->read_img($plan_pds3y_id);
+
+        $this->load_views('plan_pds3y_detail', $data);
+    }
+
+    public function increment_download_pds3y($plan_pds3y_file_id)
+    {
+        $this->plan_pds3y_model->increment_download_plan_pds3y($plan_pds3y_file_id);
+    }
+
+    // === Plan PDPA ===
+    public function pdpa()
+    {
+        $data = $this->get_common_data();
+        $data['query'] = $this->plan_pdpa_model->plan_pdpa_frontend_list();
+        $this->load_views('plan_pdpa', $data);
+    }
+
+    public function pdpa_detail($plan_pdpa_id)
+    {
+        $data = $this->get_common_data();
+        $this->plan_pdpa_model->increment_view($plan_pdpa_id);
+        $data['rsData'] = $this->plan_pdpa_model->read($plan_pdpa_id);
+
+        if (!$data['rsData']) {
+            $this->show_404_page();
+            return;
+        }
+
+        $data['rsPdf'] = $this->plan_pdpa_model->read_pdf($plan_pdpa_id);
+        $data['rsDoc'] = $this->plan_pdpa_model->read_doc($plan_pdpa_id);
+        $data['rsImg'] = $this->plan_pdpa_model->read_img($plan_pdpa_id);
+
+        $this->load_views('plan_pdpa_detail', $data);
+    }
+
+    public function increment_download_pdpa($plan_pdpa_file_id)
+    {
+        $this->plan_pdpa_model->increment_download_plan_pdpa($plan_pdpa_file_id);
+    }
+
+    // === Plan DPY ===
+    public function dpy()
+    {
+        $data = $this->get_common_data();
+        $data['query'] = $this->plan_dpy_model->plan_dpy_frontend_list();
+        $this->load_views('plan_dpy', $data);
+    }
+
+    public function dpy_detail($plan_dpy_id)
+    {
+        $data = $this->get_common_data();
+        $this->plan_dpy_model->increment_view($plan_dpy_id);
+        $data['rsData'] = $this->plan_dpy_model->read($plan_dpy_id);
+
+        if (!$data['rsData']) {
+            $this->show_404_page();
+            return;
+        }
+
+        $data['rsPdf'] = $this->plan_dpy_model->read_pdf($plan_dpy_id);
+        $data['rsDoc'] = $this->plan_dpy_model->read_doc($plan_dpy_id);
+        $data['rsImg'] = $this->plan_dpy_model->read_img($plan_dpy_id);
+
+        $this->load_views('plan_dpy_detail', $data);
+    }
+
+    public function increment_download_dpy($plan_dpy_file_id)
+    {
+        $this->plan_dpy_model->increment_download_plan_dpy($plan_dpy_file_id);
+    }
+
+    // === Plan POA ===
+    public function poa()
+    {
+        $data = $this->get_common_data();
+        $data['query'] = $this->plan_poa_model->plan_poa_frontend_list();
+        $this->load_views('plan_poa', $data);
+    }
+
+    public function poa_detail($plan_poa_id)
+    {
+        $data = $this->get_common_data();
+        $this->plan_poa_model->increment_view($plan_poa_id);
+        $data['rsData'] = $this->plan_poa_model->read($plan_poa_id);
+
+        if (!$data['rsData']) {
+            $this->show_404_page();
+            return;
+        }
+
+        $data['rsPdf'] = $this->plan_poa_model->read_pdf($plan_poa_id);
+        $data['rsDoc'] = $this->plan_poa_model->read_doc($plan_poa_id);
+        $data['rsImg'] = $this->plan_poa_model->read_img($plan_poa_id);
+
+        $this->load_views('plan_poa_detail', $data);
+    }
+
+    public function increment_download_poa($plan_poa_file_id)
+    {
+        $this->plan_poa_model->increment_download_plan_poa($plan_poa_file_id);
+    }
+
+    // === Plan PCRA ===
+    public function pcra()
+    {
+        $data = $this->get_common_data();
+        $data['query'] = $this->plan_pcra_model->plan_pcra_frontend_list();
+        $this->load_views('plan_pcra', $data);
+    }
+
+    public function pcra_detail($plan_pcra_id)
+    {
+        $data = $this->get_common_data();
+        $this->plan_pcra_model->increment_view($plan_pcra_id);
+        $data['rsData'] = $this->plan_pcra_model->read($plan_pcra_id);
+
+        if (!$data['rsData']) {
+            $this->show_404_page();
+            return;
+        }
+
+        $data['rsPdf'] = $this->plan_pcra_model->read_pdf($plan_pcra_id);
+        $data['rsDoc'] = $this->plan_pcra_model->read_doc($plan_pcra_id);
+        $data['rsImg'] = $this->plan_pcra_model->read_img($plan_pcra_id);
+
+        $this->load_views('plan_pcra_detail', $data);
+    }
+
+    public function increment_download_pcra($plan_pcra_file_id)
+    {
+        $this->plan_pcra_model->increment_download_plan_pcra($plan_pcra_file_id);
+    }
+
+    // === Plan PDM ===
+    public function pdm()
+    {
+        $data = $this->get_common_data();
+        $data['query'] = $this->plan_pdm_model->plan_pdm_frontend_list();
+        $this->load_views('plan_pdm', $data);
+    }
+
+    public function pdm_detail($plan_pdm_id)
+    {
+        $data = $this->get_common_data();
+        $this->plan_pdm_model->increment_view($plan_pdm_id);
+        $data['rsData'] = $this->plan_pdm_model->read($plan_pdm_id);
+
+        if (!$data['rsData']) {
+            $this->show_404_page();
+            return;
+        }
+
+        $data['rsPdf'] = $this->plan_pdm_model->read_pdf($plan_pdm_id);
+        $data['rsDoc'] = $this->plan_pdm_model->read_doc($plan_pdm_id);
+        $data['rsImg'] = $this->plan_pdm_model->read_img($plan_pdm_id);
+
+        $this->load_views('plan_pdm_detail', $data);
+    }
+
+    public function increment_download_pdm($plan_pdm_file_id)
+    {
+        $this->plan_pdm_model->increment_download_plan_pdm($plan_pdm_file_id);
+    }
+
+    // === Plan POP ===
+    public function pop()
+    {
+        $data = $this->get_common_data();
+        $data['query'] = $this->plan_pop_model->plan_pop_frontend_list();
+        $this->load_views('plan_pop', $data);
+    }
+
+    public function pop_detail($plan_pop_id)
+    {
+        $data = $this->get_common_data();
+        $this->plan_pop_model->increment_view($plan_pop_id);
+        $data['rsData'] = $this->plan_pop_model->read($plan_pop_id);
+
+        if (!$data['rsData']) {
+            $this->show_404_page();
+            return;
+        }
+
+        $data['rsPdf'] = $this->plan_pop_model->read_pdf($plan_pop_id);
+        $data['rsDoc'] = $this->plan_pop_model->read_doc($plan_pop_id);
+        $data['rsImg'] = $this->plan_pop_model->read_img($plan_pop_id);
+
+        $this->load_views('plan_pop_detail', $data);
+    }
+
+    public function increment_download_pop($plan_pop_file_id)
+    {
+        $this->plan_pop_model->increment_download_plan_pop($plan_pop_file_id);
+    }
+
+    // === Plan PACA ===
+    public function paca()
+    {
+        $data = $this->get_common_data();
+        $data['query'] = $this->plan_paca_model->plan_paca_frontend_list();
+        $this->load_views('plan_paca', $data);
+    }
+
+    public function paca_detail($plan_paca_id)
+    {
+        $data = $this->get_common_data();
+        $this->plan_paca_model->increment_view($plan_paca_id);
+        $data['rsData'] = $this->plan_paca_model->read($plan_paca_id);
+
+        if (!$data['rsData']) {
+            $this->show_404_page();
+            return;
+        }
+
+        $data['rsPdf'] = $this->plan_paca_model->read_pdf($plan_paca_id);
+        $data['rsDoc'] = $this->plan_paca_model->read_doc($plan_paca_id);
+        $data['rsImg'] = $this->plan_paca_model->read_img($plan_paca_id);
+
+        $this->load_views('plan_paca_detail', $data);
+    }
+
+    public function increment_download_paca($plan_paca_file_id)
+    {
+        $this->plan_paca_model->increment_download_plan_paca($plan_paca_file_id);
+    }
+
+    // === Plan PSI ===
+    public function psi()
+    {
+        $data = $this->get_common_data();
+        $data['query'] = $this->plan_psi_model->plan_psi_frontend_list();
+        $this->load_views('plan_psi', $data);
+    }
+
+    public function psi_detail($plan_psi_id)
+    {
+        $data = $this->get_common_data();
+        $this->plan_psi_model->increment_view($plan_psi_id);
+        $data['rsData'] = $this->plan_psi_model->read($plan_psi_id);
+
+        if (!$data['rsData']) {
+            $this->show_404_page();
+            return;
+        }
+
+        $data['rsPdf'] = $this->plan_psi_model->read_pdf($plan_psi_id);
+        $data['rsDoc'] = $this->plan_psi_model->read_doc($plan_psi_id);
+        $data['rsImg'] = $this->plan_psi_model->read_img($plan_psi_id);
+
+        $this->load_views('plan_psi_detail', $data);
+    }
+
+    public function increment_download_psi($plan_psi_file_id)
+    {
+        $this->plan_psi_model->increment_download_plan_psi($plan_psi_file_id);
+    }
+
+    // === Plan PMDA ===
+    public function pmda()
+    {
+        $data = $this->get_common_data();
+        $data['query'] = $this->plan_pmda_model->plan_pmda_frontend_list();
+        $this->load_views('plan_pmda', $data);
+    }
+
+    public function pmda_detail($plan_pmda_id)
+    {
+        $data = $this->get_common_data();
+        $this->plan_pmda_model->increment_view($plan_pmda_id);
+        $data['rsData'] = $this->plan_pmda_model->read($plan_pmda_id);
+
+        if (!$data['rsData']) {
+            $this->show_404_page();
+            return;
+        }
+
+        $data['rsPdf'] = $this->plan_pmda_model->read_pdf($plan_pmda_id);
+        $data['rsDoc'] = $this->plan_pmda_model->read_doc($plan_pmda_id);
+        $data['rsImg'] = $this->plan_pmda_model->read_img($plan_pmda_id);
+
+        $this->load_views('plan_pmda_detail', $data);
+    }
+
+    public function increment_download_pmda($plan_pmda_file_id)
+    {
+        $this->plan_pmda_model->increment_download_plan_pmda($plan_pmda_file_id);
+    }
+}

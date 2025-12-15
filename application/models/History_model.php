@@ -1,0 +1,392 @@
+<?php
+class History_model extends CI_Model
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('space_model');
+		// log เก็บข้อมูล
+        $this->load->model('log_model');
+    }
+
+    public function list_all()
+    {
+        $this->db->select('*');
+        $this->db->from('tbl_history');
+        $this->db->group_by('tbl_history.history_id');
+        $this->db->order_by('tbl_history.history_id', 'DESC');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function list_all_pdf($history_id)
+    {
+        $this->db->select('*');
+        $this->db->from('tbl_history_pdf');
+        $this->db->where('history_pdf_ref_id', $history_id);
+        return $this->db->get()->result();
+    }
+    public function list_all_img($history_id)
+    {
+        $this->db->select('history_img_img');
+        $this->db->from('tbl_history_img');
+        $this->db->where('history_img_ref_id', $history_id);
+        return $this->db->get()->result();
+    }
+
+    //show form edit
+    public function read($history_id)
+    {
+        $this->db->where('history_id', $history_id);
+        $query = $this->db->get('tbl_history');
+        if ($query->num_rows() > 0) {
+            $data = $query->row();
+            return $data;
+        }
+        return FALSE;
+    }
+
+    public function read_pdf($history_id)
+    {
+        $this->db->where('history_pdf_ref_id', $history_id);
+        $this->db->order_by('history_pdf_id', 'DESC');
+        $query = $this->db->get('tbl_history_pdf');
+        return $query->result();
+    }
+    public function read_doc($history_id)
+    {
+        $this->db->where('history_file_ref_id', $history_id);
+        $this->db->order_by('history_file_id', 'DESC');
+        $query = $this->db->get('tbl_history_file');
+        return $query->result();
+    }
+
+    public function read_img($history_id)
+    {
+        $this->db->where('history_img_ref_id', $history_id);
+        $query = $this->db->get('tbl_history_img');
+        $results = $query->result();
+        usort($results, function ($a, $b) {
+            return strnatcmp($a->history_img_img, $b->history_img_img);
+        });
+        return $results;
+    }
+
+
+    public function del_pdf($pdf_id)
+    {
+        // ดึงชื่อไฟล์ PDF จากฐานข้อมูลโดยใช้ $pdf_id
+        $this->db->select('history_pdf_pdf, history_pdf_ref_id');
+        $this->db->where('history_pdf_id', $pdf_id);
+        $query = $this->db->get('tbl_history_pdf');
+        $file_data = $query->row();
+		
+		// บันทึก log การลบไฟล์ PDF =============================================
+        $old_data = $this->read($file_data->history_pdf_ref_id);
+        // =======================================================================
+
+        // ลบไฟล์จากแหล่งที่เก็บไฟล์ (อาจต้องใช้ unlink หรือวิธีอื่น)
+        $file_path = './docs/file/' . $file_data->history_pdf_pdf;
+        if (file_exists($file_path)) {
+            unlink($file_path);
+        }
+
+        // ลบข้อมูลของไฟล์จากฐานข้อมูล
+        $this->db->where('history_pdf_id', $pdf_id);
+        $this->db->delete('tbl_history_pdf');
+        $this->space_model->update_server_current();
+		// บันทึก log การลบไฟล์ PDF =============================================
+        $this->log_model->add_log(
+            'ลบ',
+            'ประวัติความเป็นมา',
+            'ไฟล์ PDF: ' . $file_data->history_pdf_pdf . ' จาก: ' . ($old_data ? $old_data->history_detail : 'ไม่ระบุ'),
+            $file_data->history_pdf_ref_id,
+            array('file_type' => 'PDF', 'file_name' => $file_data->history_pdf_pdf)
+        );
+        // =======================================================================
+        $this->session->set_flashdata('del_success', TRUE);
+    }
+
+
+
+    public function del_img($file_id)
+    {
+        // ดึงชื่อไฟล์ PDF จากฐานข้อมูลโดยใช้ $file_id
+        $this->db->select('history_img_img, history_img_ref_id');
+        $this->db->where('history_img_id', $file_id);
+        $query = $this->db->get('tbl_history_img');
+        $file_data = $query->row();
+		
+		// บันทึก log การลบรูปภาพ =================================================
+        $old_data = $this->read($file_data->history_img_ref_id);
+        // =======================================================================
+
+        // ลบไฟล์จากแหล่งที่เก็บไฟล์ (อาจต้องใช้ unlink หรือวิธีอื่น)
+        $file_path = './docs/img/' . $file_data->history_img_img;
+        if (file_exists($file_path)) {
+            unlink($file_path);
+        }
+		
+		// บันทึก log การลบรูปภาพ =================================================
+        $this->log_model->add_log(
+            'ลบ',
+            'ประวัติความเป็นมา',
+            'รูปภาพ: ' . $file_data->history_img_img . ' จาก: ' . ($old_data ? $old_data->history_name : 'ไม่ระบุ'),
+            $file_data->history_img_ref_id,
+            array('file_type' => 'IMAGE', 'file_name' => $file_data->history_img_img)
+        );
+        // =======================================================================
+
+        // ลบข้อมูลของไฟล์จากฐานข้อมูล
+        $this->db->where('history_img_id', $file_id);
+        $this->db->delete('tbl_history_img');
+        $this->space_model->update_server_current();
+        $this->session->set_flashdata('del_success', TRUE);
+    }
+
+
+    public function edit($history_id)
+    {
+		        // ดึงข้อมูลเก่าก่อนแก้ไข
+        $old_data = $this->read($history_id);
+		
+        // Update history information
+        $data = array(
+            'history_detail' => $this->input->post('history_detail'),
+            'history_by' => $this->session->userdata('m_fname'), // เพิ่มชื่อคนที่แก้ไขข้อมูล
+        );
+
+        $this->db->where('history_id', $history_id);
+        $this->db->update('tbl_history', $data);
+
+        // หาพื้นที่ว่าง และอัพโหลดlimit จากฐานข้อมูล
+        $used_space = $this->space_model->get_used_space();
+        $upload_limit = $this->space_model->get_limit_storage();
+
+        $total_space_required = 0;
+        // ตรวจสอบว่ามีข้อมูลรูปภาพเพิ่มเติมหรือไม่
+        if (isset($_FILES['history_img_img'])) {
+            foreach ($_FILES['history_img_img']['name'] as $index => $name) {
+                if (isset($_FILES['history_img_img']['size'][$index])) {
+                    $total_space_required += $_FILES['history_img_img']['size'][$index];
+                }
+            }
+        }
+
+        // ตรวจสอบว่ามีข้อมูลไฟล์ PDF หรือไม่
+        if (isset($_FILES['history_pdf_pdf'])) {
+            foreach ($_FILES['history_pdf_pdf']['name'] as $index => $name) {
+                if (isset($_FILES['history_pdf_pdf']['size'][$index])) {
+                    $total_space_required += $_FILES['history_pdf_pdf']['size'][$index];
+                }
+            }
+        }
+
+        // เช็คค่าว่าง
+        if ($used_space + ($total_space_required / (1024 * 1024 * 1024)) >= $upload_limit) {
+            $this->session->set_flashdata('save_error', TRUE);
+            redirect('history_backend/adding');
+            return;
+        }
+
+        $pdf_config['upload_path'] = './docs/file';
+        $pdf_config['allowed_types'] = 'pdf';
+        $this->load->library('upload', $pdf_config, 'pdf_upload');
+
+        $doc_config['upload_path'] = './docs/file';
+        $doc_config['allowed_types'] = 'doc|docx|xls|xlsx|ppt|pptx';
+        $this->load->library('upload', $doc_config, 'doc_upload');
+
+        $img_config['upload_path'] = './docs/img';
+        $img_config['allowed_types'] = 'gif|jpg|png|jpeg|jfif';
+        $this->load->library('upload', $img_config, 'img_upload');
+
+        // ทำการอัปโหลดรูปภาพ
+        $img_main = $this->img_upload->do_upload('history_img');
+
+        // ตรวจสอบว่ามีการอัปโหลดรูปภาพหรือไม่
+        if (!empty($img_main)) {
+            $this->db->trans_start(); // เริ่ม Transaction
+
+            // ดึงข้อมูลรูปเก่า
+            $old_document = $this->db->get_where('tbl_history', array('history_id' => $history_id))->row();
+
+            // ตรวจสอบว่ามีไฟล์เก่าหรือไม่
+            if ($old_document && $old_document->history_img) {
+                $old_file_path = './docs/img/' . $old_document->history_img;
+
+                if (file_exists($old_file_path)) {
+                    unlink($old_file_path); // ลบไฟล์เก่า
+                }
+            }
+
+            // ถ้ามีการอัปโหลดรูปภาพใหม่
+            $img_data['history_img'] = $this->img_upload->data('file_name');
+            $this->db->where('history_id', $history_id);
+            $this->db->update('tbl_history', $img_data);
+
+            $this->db->trans_complete(); // สิ้นสุด Transaction
+        }
+
+        $imgs_data = array();
+
+        // ตรวจสอบว่ามีการอัปโหลดรูปภาพเพิ่มเติมหรือไม่
+        if (!empty($_FILES['history_img_img']['name'][0])) {
+
+            foreach ($_FILES['history_img_img']['name'] as $index => $name) {
+                $_FILES['history_img_img_multiple']['name'] = $name;
+                $_FILES['history_img_img_multiple']['type'] = $_FILES['history_img_img']['type'][$index];
+                $_FILES['history_img_img_multiple']['tmp_name'] = $_FILES['history_img_img']['tmp_name'][$index];
+                $_FILES['history_img_img_multiple']['error'] = $_FILES['history_img_img']['error'][$index];
+                $_FILES['history_img_img_multiple']['size'] = $_FILES['history_img_img']['size'][$index];
+
+                if ($this->img_upload->do_upload('history_img_img_multiple')) {
+                    $upload_data = $this->img_upload->data();
+                    $imgs_data[] = array(
+                        'history_img_ref_id' => $history_id,
+                        'history_img_img' => $upload_data['file_name']
+                    );
+                }
+            }
+            $this->db->insert_batch('tbl_history_img', $imgs_data);
+        }
+
+        $pdf_data = array();
+
+        // ตรวจสอบว่ามีการอัปโหลด pdf เพิ่มเติมหรือไม่
+        if (!empty($_FILES['history_pdf_pdf']['name'][0])) {
+            foreach ($_FILES['history_pdf_pdf']['name'] as $index => $name) {
+                $_FILES['history_pdf_pdf_multiple']['name'] = $name;
+                $_FILES['history_pdf_pdf_multiple']['type'] = $_FILES['history_pdf_pdf']['type'][$index];
+                $_FILES['history_pdf_pdf_multiple']['tmp_name'] = $_FILES['history_pdf_pdf']['tmp_name'][$index];
+                $_FILES['history_pdf_pdf_multiple']['error'] = $_FILES['history_pdf_pdf']['error'][$index];
+                $_FILES['history_pdf_pdf_multiple']['size'] = $_FILES['history_pdf_pdf']['size'][$index];
+
+                if ($this->pdf_upload->do_upload('history_pdf_pdf_multiple')) {
+                    $upload_data = $this->pdf_upload->data();
+                    $pdf_data[] = array(
+                        'history_pdf_ref_id' => $history_id,
+                        'history_pdf_pdf' => $upload_data['file_name']
+                    );
+                }
+            }
+            $this->db->insert_batch('tbl_history_pdf', $pdf_data);
+        }
+
+        $this->space_model->update_server_current();
+		
+		 // === เก็บ log แก้ไขข้อมูล ==============================================
+        $changes = array();
+        if ($old_data) {
+            if ($old_data->history_detail != $data['history_detail']) {
+                $changes['history_detail'] = array(
+                    'old' => $old_data->history_detail,
+                    'new' => $data['history_detail']
+                );
+            }
+            if ($old_data->history_by != $data['history_by']) {
+                $changes['history_by'] = array(
+                    'old' => $old_data->history_by,
+                    'new' => $data['history_by']
+                );
+            }
+        }
+
+        // เพิ่มข้อมูลไฟล์ที่อัพโหลด
+        $files_info = array();
+        if (!empty($imgs_data)) {
+            $files_info['images_added'] = count($imgs_data);
+            $files_info['image_names'] = array_column($imgs_data, 'history_img_img');
+        }
+        if (!empty($pdf_data)) {
+            $files_info['pdfs_added'] = count($pdf_data);
+            $files_info['pdf_names'] = array_column($pdf_data, 'history_pdf_pdf');
+        }
+
+        // บันทึก log การแก้ไขข่าว
+        $this->log_model->add_log(
+            'แก้ไข',
+            'ประวัติความเป็นมา',
+            $data['history_detail'],
+            $history_id,
+            array(
+                'changes' => $changes,
+                'files_uploaded' => $files_info,
+                'total_files_added' => count($imgs_data) + count($pdf_data)
+            )
+        );
+        // =======================================================================
+		
+        $this->session->set_flashdata('save_success', TRUE);
+    }
+
+    public function del_history($history_id)
+    {
+        $old_document = $this->db->get_where('tbl_history', array('history_id' => $history_id))->row();
+
+        $old_file_path = './docs/img/' . $old_document->history_img;
+        if (file_exists($old_file_path)) {
+            unlink($old_file_path);
+        }
+
+        $this->db->delete('tbl_history', array('history_id' => $history_id));
+        $this->space_model->update_server_current();
+    }
+
+    public function del_history_pdf($history_id)
+    {
+        // ดึงข้อมูลรายการ pdf ก่อน
+        $files = $this->db->get_where('tbl_history_pdf', array('history_pdf_ref_id' => $history_id))->result();
+
+        // ลบ pdf จากตาราง tbl_history_pdf
+        $this->db->where('history_pdf_ref_id', $history_id);
+        $this->db->delete('tbl_history_pdf');
+
+        // ลบไฟล์ pdf ที่เกี่ยวข้อง
+        foreach ($files as $files) {
+            $file_path = './docs/file/' . $files->history_pdf_pdf;
+            if (file_exists($file_path)) {
+                unlink($file_path);
+            }
+        }
+    }
+
+    public function del_history_img($history_id)
+    {
+        // ดึงข้อมูลรายการรูปภาพก่อน
+        $files = $this->db->get_where('tbl_history_img', array('history_img_ref_id' => $history_id))->result();
+
+        // ลบรูปภาพจากตาราง tbl_history_file
+        $this->db->where('history_img_ref_id', $history_id);
+        $this->db->delete('tbl_history_img');
+
+        // ลบไฟล์รูปภาพที่เกี่ยวข้อง
+        foreach ($files as $files) {
+            $file_path = './docs/img/' . $files->history_img_img;
+            if (file_exists($file_path)) {
+                unlink($file_path);
+            }
+        }
+    }
+
+    public function history_frontend()
+    {
+        $this->db->select('*');
+        $this->db->from('tbl_history');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function increment_view()
+    {
+        $this->db->where('history_id', 1);
+        $this->db->set('history_view', 'history_view + 1', false); // บวกค่า history_view ทีละ 1
+        $this->db->update('tbl_history');
+    }
+    public function increment_download_history($history_pdf_id)
+    {
+        $this->db->where('history_pdf_id', $history_pdf_id);
+        $this->db->set('history_pdf_download', 'history_pdf_download + 1', false); // บวกค่า history_download ทีละ 1
+        $this->db->update('tbl_history_pdf');
+    }
+}

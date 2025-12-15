@@ -1,0 +1,1967 @@
+<?php
+// ===================================================================
+// application/controllers/Pages.php - หลัก (หน้าแรก, ลงทะเบียน, การประเมิน)
+// ===================================================================
+defined('BASEPATH') OR exit('No direct script access allowed');
+require_once(APPPATH . 'core/Base_Frontend_Controller.php');
+
+class Pages extends Base_Frontend_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setup_form_validation();
+    }
+
+   
+
+   
+
+
+
+    // =================== Redirects to Specific Controllers ===================
+    
+    // === Core Content Controller Redirects ===
+	
+	public function all_web()
+    {
+        redirect('Core_Content_Controller/all_web', 'refresh');
+    }
+	
+    public function activity()
+    {
+        redirect('Core_Content_Controller/activity', 'refresh');
+    }
+	
+	public function contact()
+    {
+        redirect('Core_Content_Controller/contact', 'refresh');
+    }
+	
+	
+	public function otop()
+    {
+        redirect('Core_Content_Controller/otop', 'refresh');
+    }
+
+    public function activity_detail($activity_id)
+    {
+        redirect('Core_Content_Controller/activity_detail/' . $activity_id, 'refresh');
+    }
+	
+	
+	    public function increment_download_km($km_file_id)
+    {
+        redirect('Core_Content_Controller/increment_download_km/' . $km_file_id, 'refresh');
+    }
+	
+	
+
+    public function news()
+    {
+        redirect('Core_Content_Controller/news', 'refresh');
+    }
+
+    public function news_detail($news_id)
+    {
+        redirect('Core_Content_Controller/news_detail/' . $news_id, 'refresh');
+    }
+
+    public function announce()
+    {
+        redirect('Core_Content_Controller/announce', 'refresh');
+    }
+
+    public function announce_detail($announce_id)
+    {
+        redirect('Core_Content_Controller/announce_detail/' . $announce_id, 'refresh');
+    }
+
+    public function order()
+    {
+        redirect('Core_Content_Controller/order', 'refresh');
+    }
+	
+	public function km()
+{
+    redirect('Core_Content_Controller/km', 'refresh');  // ✅ ถูก
+}
+
+public function km_detail($km_id)
+{
+    redirect('Core_Content_Controller/km_detail/' . $km_id, 'refresh');  // ✅ ถูก
+}
+    public function order_detail($order_id)
+    {
+        redirect('Core_Content_Controller/order_detail/' . $order_id, 'refresh');
+    }
+
+    public function procurement()
+    {
+        redirect('Core_Content_Controller/procurement', 'refresh');
+    }
+
+    public function procurement_detail($procurement_id)
+    {
+        redirect('Core_Content_Controller/procurement_detail/' . $procurement_id, 'refresh');
+    }
+
+    public function mui()
+    {
+        redirect('Core_Content_Controller/mui', 'refresh');
+    }
+
+    public function mui_detail($mui_id)
+    {
+        redirect('Core_Content_Controller/mui_detail/' . $mui_id, 'refresh');
+    }
+
+    public function guide_work()
+    {
+        redirect('Core_Content_Controller/guide_work', 'refresh');
+    }
+
+    public function guide_work_detail($guide_work_id)
+    {
+        redirect('Core_Content_Controller/guide_work_detail/' . $guide_work_id, 'refresh');
+    }
+
+    public function loadform()
+    {
+        redirect('Core_Content_Controller/loadform', 'refresh');
+    }
+
+    public function pppw()
+    {
+        redirect('Core_Content_Controller/pppw', 'refresh');
+    }
+
+    public function msg_pres()
+    {
+        redirect('Core_Content_Controller/msg_pres', 'refresh');
+    }
+
+    public function history()
+    {
+        redirect('Core_Content_Controller/history', 'refresh');
+    }
+
+
+
+    public function vision()
+    {
+        redirect('Core_Content_Controller/vision', 'refresh');
+    }
+
+
+
+
+
+    public function cmi()
+    {
+        redirect('Core_Content_Controller/cmi', 'refresh');
+    }
+
+	
+	
+	public function gci()
+{
+    redirect('Core_Content_Controller/gci', 'refresh');
+}
+
+public function increment_download_gci($gci_pdf_id)
+{
+    redirect('Core_Content_Controller/increment_download_gci/' . $gci_pdf_id, 'refresh');
+}
+
+
+
+public function increment_download_vision($vision_pdf_id)
+{
+    redirect('Core_Content_Controller/increment_download_vision/' . $vision_pdf_id, 'refresh');
+}
+
+// === อำนาจหน้าที่ ===
+public function authority()
+{
+    redirect('Core_Content_Controller/authority', 'refresh');
+}
+
+public function increment_download_authority($authority_pdf_id)
+{
+    redirect('Core_Content_Controller/increment_download_authority/' . $authority_pdf_id, 'refresh');
+}
+
+// === ภารกิจ ===
+public function mission()
+{
+    redirect('Core_Content_Controller/mission', 'refresh');
+}
+
+public function increment_download_mission($mission_pdf_id)
+{
+    redirect('Core_Content_Controller/increment_download_mission/' . $mission_pdf_id, 'refresh');
+}
+
+// === คำขวัญ ===
+public function motto()
+{
+    redirect('Core_Content_Controller/motto', 'refresh');
+}
+
+// === อัตลักษณ์ ===
+public function ci()
+{
+    redirect('Core_Content_Controller/ci', 'refresh');
+}
+
+// === นโยบายผู้บริหาร ===
+public function executivepolicy()
+{
+    redirect('Core_Content_Controller/executivepolicy', 'refresh');
+}
+
+public function increment_download_executivepolicy($executivepolicy_pdf_id)
+{
+    redirect('Core_Content_Controller/increment_download_executivepolicy/' . $executivepolicy_pdf_id, 'refresh');
+}
+
+// === สารจากผู้บริหาร ===
+public function increment_download_msg_pres($msg_pres_id)
+{
+    redirect('Core_Content_Controller/increment_download_msg_pres/' . $msg_pres_id, 'refresh');
+}
+
+// === ข้อมูลการท่องเที่ยว ===
+public function travel()
+{
+    redirect('Core_Content_Controller/travel', 'refresh');
+}
+
+public function travel_detail($travel_id)
+{
+    redirect('Core_Content_Controller/travel_detail/' . $travel_id, 'refresh');
+}
+
+// === ข้อมูลสำคัญ ===
+public function si()
+{
+    redirect('Core_Content_Controller/si', 'refresh');
+}
+
+public function increment_download_si($si_pdf_id)
+{
+    redirect('Core_Content_Controller/increment_download_si/' . $si_pdf_id, 'refresh');
+}
+
+// === Detail pages และ download functions ===
+public function loadform_detail($loadform_id)
+{
+    redirect('Core_Content_Controller/loadform_detail/' . $loadform_id, 'refresh');
+}
+
+public function pppw_detail($pppw_id)
+{
+    redirect('Core_Content_Controller/pppw_detail/' . $pppw_id, 'refresh');
+}
+
+public function increment_download_loadform($loadform_file_id)
+{
+    redirect('Core_Content_Controller/increment_download_loadform/' . $loadform_file_id, 'refresh');
+}
+
+public function increment_download_pppw($pppw_file_id)
+{
+    redirect('Core_Content_Controller/increment_download_pppw/' . $pppw_file_id, 'refresh');
+}
+
+public function increment_download_mui($mui_file_id)
+{
+    redirect('Core_Content_Controller/increment_download_mui/' . $mui_file_id, 'refresh');
+}
+
+public function increment_download_guide_work($guide_work_file_id)
+{
+    redirect('Core_Content_Controller/increment_download_guide_work/' . $guide_work_file_id, 'refresh');
+}
+
+public function increment_download_history($history_pdf_id)
+{
+    redirect('Core_Content_Controller/increment_download_history/' . $history_pdf_id, 'refresh');
+}
+
+// === Download functions สำหรับ news, announce, order, procurement ===
+public function increment_download_news($news_file_id)
+{
+    redirect('Core_Content_Controller/increment_download_news/' . $news_file_id, 'refresh');
+}
+
+public function increment_download_announce($announce_file_id)
+{
+    redirect('Core_Content_Controller/increment_download_announce/' . $announce_file_id, 'refresh');
+}
+
+public function increment_download_order($order_file_id)
+{
+    redirect('Core_Content_Controller/increment_download_order/' . $order_file_id, 'refresh');
+}
+
+public function increment_download_procurement($procurement_file_id)
+{
+    redirect('Core_Content_Controller/increment_download_procurement/' . $procurement_file_id, 'refresh');
+}
+	
+	
+
+    // === News Media Controller Redirects ===
+    public function hotnews()
+    {
+        redirect('News_Media_Controller/hotnews', 'refresh');
+    }
+
+    public function hotnews_detail($hotnews_id)
+    {
+        redirect('News_Media_Controller/hotnews_detail/' . $hotnews_id, 'refresh');
+    }
+
+    public function weather_report()
+    {
+        redirect('News_Media_Controller/weather_report', 'refresh');
+    }
+
+    public function calendar()
+    {
+        redirect('News_Media_Controller/calendar', 'refresh');
+    }
+
+    public function calender()
+    {
+        redirect('News_Media_Controller/calender', 'refresh');
+    }
+
+    public function banner()
+    {
+        redirect('News_Media_Controller/banner', 'refresh');
+    }
+
+    public function background_personnel()
+    {
+        redirect('News_Media_Controller/background_personnel', 'refresh');
+    }
+
+    public function video()
+    {
+        redirect('News_Media_Controller/video', 'refresh');
+    }
+
+    public function video_detail($video_id)
+    {
+        redirect('News_Media_Controller/video_detail/' . $video_id, 'refresh');
+    }
+
+    public function newsletter()
+    {
+        redirect('News_Media_Controller/newsletter', 'refresh');
+    }
+	
+	
+	
+	public function weather_report_detail($weather_id)
+{
+    redirect('News_Media_Controller/weather_report_detail/' . $weather_id, 'refresh');
+}
+
+public function calendar_detail($event_id)
+{
+    redirect('News_Media_Controller/calendar_detail/' . $event_id, 'refresh');
+}
+
+public function banner_detail($banner_id)
+{
+    redirect('News_Media_Controller/banner_detail/' . $banner_id, 'refresh');
+}
+
+public function background_personnel_detail($personnel_id)
+{
+    redirect('News_Media_Controller/background_personnel_detail/' . $personnel_id, 'refresh');
+}
+
+public function newsletter_detail($newsletter_id)
+{
+    redirect('News_Media_Controller/newsletter_detail/' . $newsletter_id, 'refresh');
+}
+
+// === Download Functions ===
+public function increment_download_hotnews($hotnews_file_id)
+{
+    redirect('News_Media_Controller/increment_download_hotnews/' . $hotnews_file_id, 'refresh');
+}
+
+public function increment_download_weather_report($weather_file_id)
+{
+    redirect('News_Media_Controller/increment_download_weather_report/' . $weather_file_id, 'refresh');
+}
+
+public function increment_download_newsletter($newsletter_file_id)
+{
+    redirect('News_Media_Controller/increment_download_newsletter/' . $newsletter_file_id, 'refresh');
+}
+
+
+	
+
+    // === Plan Controller Redirects ===
+    public function plan_pdl()
+    {
+        redirect('Plan/pdl', 'refresh');
+    }
+
+    public function plan_pc3y()
+    {
+        redirect('Plan/pc3y', 'refresh');
+    }
+
+    public function plan_pds3y()
+    {
+        redirect('Plan/pds3y', 'refresh');
+    }
+
+    public function plan_pdpa()
+    {
+        redirect('Plan/pdpa', 'refresh');
+    }
+
+    public function plan_dpy()
+    {
+        redirect('Plan/dpy', 'refresh');
+    }
+
+    public function plan_poa()
+    {
+        redirect('Plan/poa', 'refresh');
+    }
+
+    public function plan_pcra()
+    {
+        redirect('Plan/pcra', 'refresh');
+    }
+
+    public function plan_pdm()
+    {
+        redirect('Plan/pdm', 'refresh');
+    }
+
+    public function plan_pop()
+    {
+        redirect('Plan/pop', 'refresh');
+    }
+
+    public function plan_paca()
+    {
+        redirect('Plan/paca', 'refresh');
+    }
+
+    public function plan_psi()
+    {
+        redirect('Plan/psi', 'refresh');
+    }
+
+    public function plan_pmda()
+    {
+        redirect('Plan/pmda', 'refresh');
+    }
+
+    public function plan_progress()
+    {
+        redirect('Plan/progress', 'refresh');
+    }
+	
+	
+	
+	public function progress_detail($plan_progress_id)
+{
+    redirect('Plan/progress_detail/' . $plan_progress_id, 'refresh');
+}
+
+public function pdl_detail($plan_pdl_id)
+{
+    redirect('Plan/pdl_detail/' . $plan_pdl_id, 'refresh');
+}
+
+public function pc3y_detail($pc3y_id)
+{
+    redirect('Plan/pc3y_detail/' . $pc3y_id, 'refresh');
+}
+
+public function pds3y_detail($plan_pds3y_id)
+{
+    redirect('Plan/pds3y_detail/' . $plan_pds3y_id, 'refresh');
+}
+
+public function pdpa_detail($plan_pdpa_id)
+{
+    redirect('Plan/pdpa_detail/' . $plan_pdpa_id, 'refresh');
+}
+
+public function dpy_detail($plan_dpy_id)
+{
+    redirect('Plan/dpy_detail/' . $plan_dpy_id, 'refresh');
+}
+
+public function poa_detail($plan_poa_id)
+{
+    redirect('Plan/poa_detail/' . $plan_poa_id, 'refresh');
+}
+
+public function pcra_detail($plan_pcra_id)
+{
+    redirect('Plan/pcra_detail/' . $plan_pcra_id, 'refresh');
+}
+
+public function pdm_detail($plan_pdm_id)
+{
+    redirect('Plan/pdm_detail/' . $plan_pdm_id, 'refresh');
+}
+
+public function pop_detail($plan_pop_id)
+{
+    redirect('Plan/pop_detail/' . $plan_pop_id, 'refresh');
+}
+
+public function paca_detail($plan_paca_id)
+{
+    redirect('Plan/paca_detail/' . $plan_paca_id, 'refresh');
+}
+
+public function psi_detail($plan_psi_id)
+{
+    redirect('Plan/psi_detail/' . $plan_psi_id, 'refresh');
+}
+
+public function pmda_detail($plan_pmda_id)
+{
+    redirect('Plan/pmda_detail/' . $plan_pmda_id, 'refresh');
+}
+
+// === Download Functions ===
+public function increment_download_progress($plan_progress_file_id)
+{
+    redirect('Plan/increment_download_progress/' . $plan_progress_file_id, 'refresh');
+}
+
+public function increment_download_pdl($plan_pdl_file_id)
+{
+    redirect('Plan/increment_download_pdl/' . $plan_pdl_file_id, 'refresh');
+}
+
+public function increment_download_pc3y($pc3y_file_id)
+{
+    redirect('Plan/increment_download_pc3y/' . $pc3y_file_id, 'refresh');
+}
+
+public function increment_download_pds3y($plan_pds3y_file_id)
+{
+    redirect('Plan/increment_download_pds3y/' . $plan_pds3y_file_id, 'refresh');
+}
+
+public function increment_download_pdpa($plan_pdpa_file_id)
+{
+    redirect('Plan/increment_download_pdpa/' . $plan_pdpa_file_id, 'refresh');
+}
+
+public function increment_download_dpy($plan_dpy_file_id)
+{
+    redirect('Plan/increment_download_dpy/' . $plan_dpy_file_id, 'refresh');
+}
+
+public function increment_download_poa($plan_poa_file_id)
+{
+    redirect('Plan/increment_download_poa/' . $plan_poa_file_id, 'refresh');
+}
+
+public function increment_download_pcra($plan_pcra_file_id)
+{
+    redirect('Plan/increment_download_pcra/' . $plan_pcra_file_id, 'refresh');
+}
+
+public function increment_download_pdm($plan_pdm_file_id)
+{
+    redirect('Plan/increment_download_pdm/' . $plan_pdm_file_id, 'refresh');
+}
+
+public function increment_download_pop($plan_pop_file_id)
+{
+    redirect('Plan/increment_download_pop/' . $plan_pop_file_id, 'refresh');
+}
+
+public function increment_download_paca($plan_paca_file_id)
+{
+    redirect('Plan/increment_download_paca/' . $plan_paca_file_id, 'refresh');
+}
+
+public function increment_download_psi($plan_psi_file_id)
+{
+    redirect('Plan/increment_download_psi/' . $plan_psi_file_id, 'refresh');
+}
+
+public function increment_download_pmda($plan_pmda_file_id)
+{
+    redirect('Plan/increment_download_pmda/' . $plan_pmda_file_id, 'refresh');
+}
+	
+	
+
+    // === Canon Controller Redirects ===
+    public function canon_bgps()
+    {
+        redirect('Canon/bgps', 'refresh');
+    }
+
+    public function canon_chh()
+    {
+        redirect('Canon/chh', 'refresh');
+    }
+
+    public function canon_ritw()
+    {
+        redirect('Canon/ritw', 'refresh');
+    }
+
+    public function canon_market()
+    {
+        redirect('Canon/market', 'refresh');
+    }
+
+    public function canon_rmwp()
+    {
+        redirect('Canon/rmwp', 'refresh');
+    }
+
+    public function canon_rcp()
+    {
+        redirect('Canon/rcp', 'refresh');
+    }
+
+    public function canon_rcsp()
+    {
+        redirect('Canon/rcsp', 'refresh');
+    }
+	
+
+
+// === Detail Functions ===
+public function bgps_detail($canon_bgps_id)
+{
+    redirect('Canon/bgps_detail/' . $canon_bgps_id, 'refresh');
+}
+
+public function chh_detail($canon_chh_id)
+{
+    redirect('Canon/chh_detail/' . $canon_chh_id, 'refresh');
+}
+
+public function ritw_detail($canon_ritw_id)
+{
+    redirect('Canon/ritw_detail/' . $canon_ritw_id, 'refresh');
+}
+
+public function market_detail($canon_market_id)
+{
+    redirect('Canon/market_detail/' . $canon_market_id, 'refresh');
+}
+
+public function rmwp_detail($canon_rmwp_id)
+{
+    redirect('Canon/rmwp_detail/' . $canon_rmwp_id, 'refresh');
+}
+
+public function rcp_detail($canon_rcp_id)
+{
+    redirect('Canon/rcp_detail/' . $canon_rcp_id, 'refresh');
+}
+
+public function rcsp_detail($canon_rcsp_id)
+{
+    redirect('Canon/rcsp_detail/' . $canon_rcsp_id, 'refresh');
+}
+
+// === Download Functions ===
+public function increment_download_bgps($canon_bgps_file_id)
+{
+    redirect('Canon/increment_download_bgps/' . $canon_bgps_file_id, 'refresh');
+}
+
+public function increment_download_chh($canon_chh_file_id)
+{
+    redirect('Canon/increment_download_chh/' . $canon_chh_file_id, 'refresh');
+}
+
+public function increment_download_ritw($canon_ritw_file_id)
+{
+    redirect('Canon/increment_download_ritw/' . $canon_ritw_file_id, 'refresh');
+}
+
+public function increment_download_market($canon_market_file_id)
+{
+    redirect('Canon/increment_download_market/' . $canon_market_file_id, 'refresh');
+}
+
+public function increment_download_rmwp($canon_rmwp_file_id)
+{
+    redirect('Canon/increment_download_rmwp/' . $canon_rmwp_file_id, 'refresh');
+}
+
+public function increment_download_rcp($canon_rcp_file_id)
+{
+    redirect('Canon/increment_download_rcp/' . $canon_rcp_file_id, 'refresh');
+}
+
+public function increment_download_rcsp($canon_rcsp_file_id)
+{
+    redirect('Canon/increment_download_rcsp/' . $canon_rcsp_file_id, 'refresh');
+}
+
+    // === PBSV Controller Redirects ===
+    public function pbsv_cac()
+    {
+        redirect('PBSV_Controller/cac', 'refresh');
+    }
+
+    public function pbsv_cig()
+    {
+        redirect('PBSV_Controller/cig', 'refresh');
+    }
+
+    public function pbsv_cjc()
+    {
+        redirect('PBSV_Controller/cjc', 'refresh');
+    }
+
+    public function pbsv_utilities()
+    {
+        redirect('PBSV_Controller/utilities', 'refresh');
+    }
+
+    public function pbsv_sags()
+    {
+        redirect('PBSV_Controller/sags', 'refresh');
+    }
+
+    public function pbsv_ahs()
+    {
+        redirect('PBSV_Controller/ahs', 'refresh');
+    }
+
+    public function pbsv_oppr()
+    {
+        redirect('PBSV_Controller/oppr', 'refresh');
+    }
+
+    public function pbsv_ems()
+    {
+        redirect('PBSV_Controller/ems', 'refresh');
+    }
+
+    public function pbsv_gup()
+    {
+        redirect('PBSV_Controller/gup', 'refresh');
+    }
+
+    public function pbsv_e_book()
+    {
+        redirect('PBSV_Controller/e_book', 'refresh');
+    }
+
+    public function pbsv_statistics()
+    {
+        redirect('PBSV_Controller/statistics', 'refresh');
+    }
+	
+	
+	public function pbsv_cac_detail($pbsv_cac_id)
+{
+    redirect('PBSV_Controller/pbsv_cac_detail/' . $pbsv_cac_id, 'refresh');
+}
+
+public function pbsv_cig_detail($pbsv_cig_id)
+{
+    redirect('PBSV_Controller/pbsv_cig_detail/' . $pbsv_cig_id, 'refresh');
+}
+
+public function pbsv_cjc_detail($pbsv_cjc_id)
+{
+    redirect('PBSV_Controller/pbsv_cjc_detail/' . $pbsv_cjc_id, 'refresh');
+}
+
+public function pbsv_utilities_detail($pbsv_utilities_id)
+{
+    redirect('PBSV_Controller/pbsv_utilities_detail/' . $pbsv_utilities_id, 'refresh');
+}
+
+public function pbsv_sags_detail($pbsv_sags_id)
+{
+    redirect('PBSV_Controller/pbsv_sags_detail/' . $pbsv_sags_id, 'refresh');
+}
+
+public function pbsv_ahs_detail($pbsv_ahs_id)
+{
+    redirect('PBSV_Controller/pbsv_ahs_detail/' . $pbsv_ahs_id, 'refresh');
+}
+
+public function pbsv_oppr_detail($pbsv_oppr_id)
+{
+    redirect('PBSV_Controller/pbsv_oppr_detail/' . $pbsv_oppr_id, 'refresh');
+}
+
+public function pbsv_ems_detail($pbsv_ems_id)
+{
+    redirect('PBSV_Controller/pbsv_ems_detail/' . $pbsv_ems_id, 'refresh');
+}
+
+public function pbsv_gup_detail($pbsv_gup_id)
+{
+    redirect('PBSV_Controller/pbsv_gup_detail/' . $pbsv_gup_id, 'refresh');
+}
+
+public function pbsv_e_book_detail($pbsv_e_book_id)
+{
+    redirect('PBSV_Controller/pbsv_e_book_detail/' . $pbsv_e_book_id, 'refresh');
+}
+
+public function pbsv_statistics_detail($pbsv_statistics_id)
+{
+    redirect('PBSV_Controller/pbsv_statistics_detail/' . $pbsv_statistics_id, 'refresh');
+}
+
+// === Download Functions ===
+public function increment_download_pbsv_cac($pbsv_cac_file_id)
+{
+    redirect('PBSV_Controller/increment_download_pbsv_cac/' . $pbsv_cac_file_id, 'refresh');
+}
+
+public function increment_download_pbsv_cig($pbsv_cig_file_id)
+{
+    redirect('PBSV_Controller/increment_download_pbsv_cig/' . $pbsv_cig_file_id, 'refresh');
+}
+
+public function increment_download_pbsv_cjc($pbsv_cjc_file_id)
+{
+    redirect('PBSV_Controller/increment_download_pbsv_cjc/' . $pbsv_cjc_file_id, 'refresh');
+}
+
+public function increment_download_pbsv_utilities($pbsv_utilities_file_id)
+{
+    redirect('PBSV_Controller/increment_download_pbsv_utilities/' . $pbsv_utilities_file_id, 'refresh');
+}
+
+public function increment_download_pbsv_sags($pbsv_sags_file_id)
+{
+    redirect('PBSV_Controller/increment_download_pbsv_sags/' . $pbsv_sags_file_id, 'refresh');
+}
+
+public function increment_download_pbsv_ahs($pbsv_ahs_file_id)
+{
+    redirect('PBSV_Controller/increment_download_pbsv_ahs/' . $pbsv_ahs_file_id, 'refresh');
+}
+
+public function increment_download_pbsv_oppr($pbsv_oppr_file_id)
+{
+    redirect('PBSV_Controller/increment_download_pbsv_oppr/' . $pbsv_oppr_file_id, 'refresh');
+}
+
+public function increment_download_pbsv_ems($pbsv_ems_file_id)
+{
+    redirect('PBSV_Controller/increment_download_pbsv_ems/' . $pbsv_ems_file_id, 'refresh');
+}
+
+public function increment_download_pbsv_gup($pbsv_gup_file_id)
+{
+    redirect('PBSV_Controller/increment_download_pbsv_gup/' . $pbsv_gup_file_id, 'refresh');
+}
+
+public function increment_download_pbsv_e_book($pbsv_e_book_file_id)
+{
+    redirect('PBSV_Controller/increment_download_pbsv_e_book/' . $pbsv_e_book_file_id, 'refresh');
+}
+
+public function increment_download_pbsv_statistics($pbsv_statistics_file_id)
+{
+    redirect('PBSV_Controller/increment_download_pbsv_statistics/' . $pbsv_statistics_file_id, 'refresh');
+}
+	
+	
+
+    // === Operation Controller Redirects ===
+
+
+    public function operation_report()
+    {
+        redirect('Operation_Controller/report', 'refresh');
+    }
+
+    public function operation_sap()
+    {
+        redirect('Operation_Controller/sap', 'refresh');
+    }
+
+    public function operation_pm()
+    {
+        redirect('Operation_Controller/pm', 'refresh');
+    }
+
+    public function operation_mr()
+    {
+        redirect('Operation_Controller/mr', 'refresh');
+    }
+
+    public function operation_policy_hr()
+    {
+        redirect('Operation_Controller/policy_hr', 'refresh');
+    }
+
+    public function operation_am_hr()
+    {
+        redirect('Operation_Controller/am_hr', 'refresh');
+    }
+
+    public function operation_rdam_hr()
+    {
+        redirect('Operation_Controller/rdam_hr', 'refresh');
+    }
+
+
+
+    public function operation_po()
+    {
+        redirect('Operation_Controller/po', 'refresh');
+    }
+
+
+
+    public function operation_pgn()
+    {
+        redirect('Operation_Controller/pgn', 'refresh');
+    }
+
+    public function operation_mcc()
+    {
+        redirect('Operation_Controller/mcc', 'refresh');
+    }
+
+    public function operation_aca()
+    {
+        redirect('Operation_Controller/aca', 'refresh');
+    }
+
+    public function operation_aditn()
+    {
+        redirect('Operation_Controller/aditn', 'refresh');
+    }
+
+    public function operation_procurement()
+    {
+        redirect('Operation_Controller/procurement', 'refresh');
+    }
+
+    public function operation_aa()
+    {
+        redirect('Operation_Controller/aa', 'refresh');
+    }
+	
+
+// === Topic Functions (สำหรับ modules ที่มี topic) ===
+public function operation_reauf_topic()
+{
+    redirect('Operation_Controller/operation_reauf_topic', 'refresh');
+}
+
+public function operation_cdm_topic()
+{
+    redirect('Operation_Controller/operation_cdm_topic', 'refresh');
+}
+
+public function operation_eco_topic()
+{
+    redirect('Operation_Controller/operation_eco_topic', 'refresh');
+}
+
+public function operation_meeting_topic()
+{
+    redirect('Operation_Controller/operation_meeting_topic', 'refresh');
+}
+
+// === Main Functions with Parameters ===
+public function operation_reauf($operation_reauf_type_id)
+{
+    redirect('Operation_Controller/operation_reauf/' . $operation_reauf_type_id, 'refresh');
+}
+
+public function operation_cdm($operation_cdm_type_id)
+{
+    redirect('Operation_Controller/operation_cdm/' . $operation_cdm_type_id, 'refresh');
+}
+
+public function operation_eco($operation_eco_type_id)
+{
+    redirect('Operation_Controller/operation_eco/' . $operation_eco_type_id, 'refresh');
+}
+
+public function operation_meeting($operation_meeting_type_id)
+{
+    redirect('Operation_Controller/operation_meeting/' . $operation_meeting_type_id, 'refresh');
+}
+
+// === Detail Functions ===
+public function operation_reauf_detail($operation_reauf_id)
+{
+    redirect('Operation_Controller/operation_reauf_detail/' . $operation_reauf_id, 'refresh');
+}
+
+public function operation_report_detail($operation_report_id)
+{
+    redirect('Operation_Controller/operation_report_detail/' . $operation_report_id, 'refresh');
+}
+
+public function operation_sap_detail($operation_sap_id)
+{
+    redirect('Operation_Controller/operation_sap_detail/' . $operation_sap_id, 'refresh');
+}
+
+public function operation_pm_detail($operation_pm_id)
+{
+    redirect('Operation_Controller/operation_pm_detail/' . $operation_pm_id, 'refresh');
+}
+
+public function operation_mr_detail($operation_mr_id)
+{
+    redirect('Operation_Controller/operation_mr_detail/' . $operation_mr_id, 'refresh');
+}
+
+public function operation_policy_hr_detail($operation_policy_hr_id)
+{
+    redirect('Operation_Controller/operation_policy_hr_detail/' . $operation_policy_hr_id, 'refresh');
+}
+
+public function operation_am_hr_detail($operation_am_hr_id)
+{
+    redirect('Operation_Controller/operation_am_hr_detail/' . $operation_am_hr_id, 'refresh');
+}
+
+public function operation_rdam_hr_detail($operation_rdam_hr_id)
+{
+    redirect('Operation_Controller/operation_rdam_hr_detail/' . $operation_rdam_hr_id, 'refresh');
+}
+
+public function operation_cdm_detail($operation_cdm_id)
+{
+    redirect('Operation_Controller/operation_cdm_detail/' . $operation_cdm_id, 'refresh');
+}
+
+public function operation_po_detail($operation_po_id)
+{
+    redirect('Operation_Controller/operation_po_detail/' . $operation_po_id, 'refresh');
+}
+
+public function operation_eco_detail($operation_eco_id)
+{
+    redirect('Operation_Controller/operation_eco_detail/' . $operation_eco_id, 'refresh');
+}
+
+public function operation_meeting_detail($operation_meeting_id)
+{
+    redirect('Operation_Controller/operation_meeting_detail/' . $operation_meeting_id, 'refresh');
+}
+
+public function operation_pgn_detail($operation_pgn_id)
+{
+    redirect('Operation_Controller/operation_pgn_detail/' . $operation_pgn_id, 'refresh');
+}
+
+public function operation_mcc_detail($operation_mcc_id)
+{
+    redirect('Operation_Controller/operation_mcc_detail/' . $operation_mcc_id, 'refresh');
+}
+
+public function operation_aca_detail($operation_aca_id)
+{
+    redirect('Operation_Controller/operation_aca_detail/' . $operation_aca_id, 'refresh');
+}
+
+public function operation_aditn_detail($operation_aditn_id)
+{
+    redirect('Operation_Controller/operation_aditn_detail/' . $operation_aditn_id, 'refresh');
+}
+
+public function operation_procurement_detail($operation_procurement_id)
+{
+    redirect('Operation_Controller/operation_procurement_detail/' . $operation_procurement_id, 'refresh');
+}
+
+public function operation_aa_detail($operation_aa_id)
+{
+    redirect('Operation_Controller/operation_aa_detail/' . $operation_aa_id, 'refresh');
+}
+
+// === Download Functions ===
+public function increment_download_operation_reauf($operation_reauf_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_reauf/' . $operation_reauf_file_id, 'refresh');
+}
+
+public function increment_download_operation_report($operation_report_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_report/' . $operation_report_file_id, 'refresh');
+}
+
+public function increment_download_operation_sap($operation_sap_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_sap/' . $operation_sap_file_id, 'refresh');
+}
+
+public function increment_download_operation_pm($operation_pm_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_pm/' . $operation_pm_file_id, 'refresh');
+}
+
+public function increment_download_operation_mr($operation_mr_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_mr/' . $operation_mr_file_id, 'refresh');
+}
+
+public function increment_download_operation_policy_hr($operation_policy_hr_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_policy_hr/' . $operation_policy_hr_file_id, 'refresh');
+}
+
+public function increment_download_operation_am_hr($operation_am_hr_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_am_hr/' . $operation_am_hr_file_id, 'refresh');
+}
+
+public function increment_download_operation_rdam_hr($operation_rdam_hr_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_rdam_hr/' . $operation_rdam_hr_file_id, 'refresh');
+}
+
+public function increment_download_operation_cdm($operation_cdm_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_cdm/' . $operation_cdm_file_id, 'refresh');
+}
+
+public function increment_download_operation_po($operation_po_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_po/' . $operation_po_file_id, 'refresh');
+}
+
+public function increment_download_operation_eco($operation_eco_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_eco/' . $operation_eco_file_id, 'refresh');
+}
+
+public function increment_download_operation_meeting($operation_meeting_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_meeting/' . $operation_meeting_file_id, 'refresh');
+}
+
+public function increment_download_operation_pgn($operation_pgn_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_pgn/' . $operation_pgn_file_id, 'refresh');
+}
+
+public function increment_download_operation_mcc($operation_mcc_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_mcc/' . $operation_mcc_file_id, 'refresh');
+}
+
+public function increment_download_operation_aca($operation_aca_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_aca/' . $operation_aca_file_id, 'refresh');
+}
+
+public function increment_download_operation_aditn($operation_aditn_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_aditn/' . $operation_aditn_file_id, 'refresh');
+}
+
+public function increment_download_operation_procurement($operation_procurement_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_procurement/' . $operation_procurement_file_id, 'refresh');
+}
+
+public function increment_download_operation_aa($operation_aa_file_id)
+{
+    redirect('Operation_Controller/increment_download_operation_aa/' . $operation_aa_file_id, 'refresh');
+}
+
+    // === Personnel Controller Redirects ===
+    public function p_executives()
+    {
+        redirect('Personnel_Controller/executives', 'refresh');
+    }
+
+    public function p_council()
+    {
+        redirect('Personnel_Controller/council', 'refresh');
+    }
+
+    public function p_unit_leaders()
+    {
+        redirect('Personnel_Controller/unit_leaders', 'refresh');
+    }
+
+    public function p_deputy()
+    {
+        redirect('Personnel_Controller/deputy', 'refresh');
+    }
+
+    public function p_treasury()
+    {
+        redirect('Personnel_Controller/treasury', 'refresh');
+    }
+
+    public function p_maintenance()
+    {
+        redirect('Personnel_Controller/maintenance', 'refresh');
+    }
+
+    public function p_public()
+    {
+        redirect('Personnel_Controller/public', 'refresh');
+    }
+
+    public function p_learder()
+    {
+        redirect('Personnel_Controller/learder', 'refresh');
+    }
+
+    public function p_welfare()
+    {
+        redirect('Personnel_Controller/welfare', 'refresh');
+    }
+
+    public function p_office()
+    {
+        redirect('Personnel_Controller/office', 'refresh');
+    }
+
+    public function p_plumbing()
+    {
+        redirect('Personnel_Controller/plumbing', 'refresh');
+    }
+
+    public function p_bads()
+    {
+        redirect('Personnel_Controller/bads', 'refresh');
+    }
+
+    public function p_other()
+    {
+        redirect('Personnel_Controller/other', 'refresh');
+    }
+
+    public function p_education()
+    {
+        redirect('Personnel_Controller/education', 'refresh');
+    }
+
+    public function p_audit()
+    {
+        redirect('Personnel_Controller/audit', 'refresh');
+    }
+
+    // === Special Operation Controller Redirects ===
+    public function p_sopopip()
+    {
+        redirect('Special_Operation_Controller/sopopip', 'refresh');
+    }
+
+    public function p_sopopaortsr()
+    {
+        redirect('Special_Operation_Controller/sopopaortsr', 'refresh');
+    }
+
+    public function p_rpobuy()
+    {
+        redirect('Special_Operation_Controller/rpobuy', 'refresh');
+    }
+
+    public function p_rpo()
+    {
+        redirect('Special_Operation_Controller/rpo', 'refresh');
+    }
+
+    public function p_reb()
+    {
+        redirect('Special_Operation_Controller/reb', 'refresh');
+    }
+	
+	public function p_sopopip_detail($p_sopopip_id)
+{
+    redirect('Special_Operation_Controller/p_sopopip_detail/' . $p_sopopip_id, 'refresh');
+}
+
+public function p_sopopaortsr_detail($p_sopopaortsr_id)
+{
+    redirect('Special_Operation_Controller/p_sopopaortsr_detail/' . $p_sopopaortsr_id, 'refresh');
+}
+
+public function p_rpobuy_detail($p_rpobuy_id)
+{
+    redirect('Special_Operation_Controller/p_rpobuy_detail/' . $p_rpobuy_id, 'refresh');
+}
+
+public function p_rpo_detail($p_rpo_id)
+{
+    redirect('Special_Operation_Controller/p_rpo_detail/' . $p_rpo_id, 'refresh');
+}
+
+public function p_reb_detail($p_reb_id)
+{
+    redirect('Special_Operation_Controller/p_reb_detail/' . $p_reb_id, 'refresh');
+}
+
+// === Download Functions ===
+public function increment_download_p_sopopip($p_sopopip_file_id)
+{
+    redirect('Special_Operation_Controller/increment_download_p_sopopip/' . $p_sopopip_file_id, 'refresh');
+}
+
+public function increment_download_p_sopopaortsr($p_sopopaortsr_file_id)
+{
+    redirect('Special_Operation_Controller/increment_download_p_sopopaortsr/' . $p_sopopaortsr_file_id, 'refresh');
+}
+
+public function increment_download_p_rpobuy($p_rpobuy_file_id)
+{
+    redirect('Special_Operation_Controller/increment_download_p_rpobuy/' . $p_rpobuy_file_id, 'refresh');
+}
+
+public function increment_download_p_rpo($p_rpo_file_id)
+{
+    redirect('Special_Operation_Controller/increment_download_p_rpo/' . $p_rpo_file_id, 'refresh');
+}
+
+public function increment_download_p_reb($p_reb_file_id)
+{
+    redirect('Special_Operation_Controller/increment_download_p_reb/' . $p_reb_file_id, 'refresh');
+}
+
+    // === Laws Controller Redirects ===
+    public function laws_ral()
+    {
+        redirect('Laws_Controller/ral', 'refresh');
+    }
+
+    public function laws_rl_folder()
+    {
+        redirect('Laws_Controller/rl_folder', 'refresh');
+    }
+
+    public function laws_rl_file()
+    {
+        redirect('Laws_Controller/rl_file', 'refresh');
+    }
+
+    public function laws_rm()
+    {
+        redirect('Laws_Controller/rm', 'refresh');
+    }
+
+    public function laws_act()
+    {
+        redirect('Laws_Controller/act', 'refresh');
+    }
+
+    public function laws_ec()
+    {
+        redirect('Laws_Controller/ec', 'refresh');
+    }
+
+    public function laws_la()
+    {
+        redirect('Laws_Controller/la', 'refresh');
+    }
+
+    public function laws()
+    {
+        redirect('Laws_Controller', 'refresh');
+    }
+
+    // === Finance Tax Controller Redirects ===
+
+
+
+    public function arevenuec()
+    {
+        redirect('Finance_Tax_Controller/arevenuec', 'refresh');
+    }
+	
+	public function finance_topic()
+{
+    redirect('Finance_Tax_Controller/finance_topic', 'refresh');
+}
+
+public function taepts_topic()
+{
+    redirect('Finance_Tax_Controller/taepts_topic', 'refresh');
+}
+
+// === Main Functions with Parameters ===
+public function finance($finance_type_id)
+{
+    redirect('Finance_Tax_Controller/finance/' . $finance_type_id, 'refresh');
+}
+
+public function taepts($taepts_type_id)
+{
+    redirect('Finance_Tax_Controller/taepts/' . $taepts_type_id, 'refresh');
+}
+
+// === Detail Functions ===
+public function finance_detail($finance_id)
+{
+    redirect('Finance_Tax_Controller/finance_detail/' . $finance_id, 'refresh');
+}
+
+public function taepts_detail($taepts_id)
+{
+    redirect('Finance_Tax_Controller/taepts_detail/' . $taepts_id, 'refresh');
+}
+
+public function arevenuec_detail($arevenuec_id)
+{
+    redirect('Finance_Tax_Controller/arevenuec_detail/' . $arevenuec_id, 'refresh');
+}
+
+// === Download Functions ===
+public function increment_download_finance($finance_file_id)
+{
+    redirect('Finance_Tax_Controller/increment_download_finance/' . $finance_file_id, 'refresh');
+}
+
+public function increment_download_taepts($taepts_file_id)
+{
+    redirect('Finance_Tax_Controller/increment_download_taepts/' . $taepts_file_id, 'refresh');
+}
+
+public function increment_download_arevenuec($arevenuec_file_id)
+{
+    redirect('Finance_Tax_Controller/increment_download_arevenuec/' . $arevenuec_file_id, 'refresh');
+}
+	
+
+	
+	
+	
+	
+	
+    // === E-service and Form Controller Redirects ===
+    public function form_esv()
+    {
+        redirect('E_service_and_form_Controller/form_esv', 'refresh');
+    }
+	 public function service_systems()
+{
+    redirect('E_service_and_form_Controller/service_systems', 'refresh');  // ✅ ถูก
+}
+	public function menu_eservice()
+    {
+        redirect('E_service_and_form_Controller/menu_eservice', 'refresh');
+    }
+
+    public function esv_ods()
+    {
+        redirect('E_service_and_form_Controller/esv_ods', 'refresh');
+    }
+
+    public function manual_esv()
+    {
+        redirect('E_service_and_form_Controller/manual_esv', 'refresh');
+    }
+
+    public function elderly_aw_form()
+    {
+        redirect('E_service_and_form_Controller/elderly_aw_form', 'refresh');
+    }
+
+    public function elderly_aw_ods()
+    {
+        redirect('E_service_and_form_Controller/elderly_aw_ods', 'refresh');
+    }
+
+    public function kid_aw_form()
+    {
+        redirect('E_service_and_form_Controller/kid_aw_form', 'refresh');
+    }
+
+    public function kid_aw_ods()
+    {
+        redirect('E_service_and_form_Controller/kid_aw_ods', 'refresh');
+    }
+	
+	public function e_service()
+{
+    redirect('E_service_and_form_Controller/e_service', 'refresh');
+}
+
+// === ส่งเอกสารออนไลน์ ===
+public function adding_esv_ods()
+{
+    redirect('E_service_and_form_Controller/adding_esv_ods', 'refresh');
+}
+
+public function add_esv_ods()
+{
+    redirect('E_service_and_form_Controller/add_esv_ods', 'refresh');
+}
+
+// === คู่มือบริการ ===
+public function manual_esv_detail($manual_esv_id)
+{
+    redirect('E_service_and_form_Controller/manual_esv_detail/' . $manual_esv_id, 'refresh');
+}
+
+// === เบี้ยยังชีพผู้สูงอายุ ===
+public function add_elderly_aw_ods()
+{
+    redirect('E_service_and_form_Controller/add_elderly_aw_ods', 'refresh');
+}
+
+public function elderly_aw()
+{
+    redirect('E_service_and_form_Controller/elderly_aw', 'refresh');
+}
+
+// === เบี้ยยังชีพเด็ก ===
+public function add_kid_aw_ods()
+{
+    redirect('E_service_and_form_Controller/add_kid_aw_ods', 'refresh');
+}
+
+public function kid_aw()
+{
+    redirect('E_service_and_form_Controller/kid_aw', 'refresh');
+}
+	
+
+    // === User Interaction Controller Redirects ===
+    public function adding_q_a()
+    {
+        redirect('E_service_and_form_Controller/adding_q_a', 'refresh');
+    }
+
+    public function addding_q_a() // รองรับ typo เดิม
+    {
+        redirect('E_service_and_form_Controller/adding_q_a', 'refresh');
+    }
+
+    public function q_a_list()
+    {
+        redirect('E_service_and_form_Controller/q_a', 'refresh');
+    }
+
+    public function complain()
+    {
+        redirect('E_service_and_form_Controller/adding_complain', 'refresh');
+    }
+
+    public function queue()
+    {
+        redirect('E_service_and_form_Controller/adding_queue', 'refresh');
+    }
+
+    public function corruption()
+    {
+        redirect('E_service_and_form_Controller/adding_corruption', 'refresh');
+    }
+
+    public function suggestions()
+    {
+        redirect('E_service_and_form_Controller/adding_suggestions', 'refresh');
+    }
+	public function q_a()
+{
+    redirect('E_service_and_form_Controller/q_a', 'refresh');
+}
+
+public function add_q_a()
+{
+    redirect('E_service_and_form_Controller/add_q_a', 'refresh');
+}
+
+public function add_reply_q_a()
+{
+    redirect('E_service_and_form_Controller/add_reply_q_a', 'refresh');
+}
+
+public function q_a_chat($q_a_id)
+{
+    redirect('E_service_and_form_Controller/q_a_chat/' . $q_a_id, 'refresh');
+}
+
+// === ร้องเรียน/ร้องทุกข์ ===
+public function adding_complain()
+{
+    redirect('E_service_and_form_Controller/adding_complain', 'refresh');
+}
+
+public function add_complain()
+{
+    redirect('E_service_and_form_Controller/add_complain', 'refresh');
+}
+
+public function follow_complain()
+{
+    redirect('E_service_and_form_Controller/follow_complain', 'refresh');
+}
+
+// === จองคิว ===
+public function adding_queue()
+{
+    redirect('E_service_and_form_Controller/adding_queue', 'refresh');
+}
+
+public function add_queue()
+{
+    redirect('E_service_and_form_Controller/add_queue', 'refresh'); 
+}
+
+public function follow_queue()
+{
+    redirect('E_service_and_form_Controller/follow_queue', 'refresh');
+}
+
+// === แจ้งเรื่องทุจริต ===
+public function adding_corruption()
+{
+    redirect('E_service_and_form_Controller/adding_corruption', 'refresh');
+}
+
+public function add_corruption()
+{
+    redirect('E_service_and_form_Controller/add_corruption', 'refresh');
+}
+
+// === ข้อเสนอแนะ ===
+public function adding_suggestions()
+{
+    redirect('E_service_and_form_Controller/adding_suggestions', 'refresh');
+}
+
+public function add_suggestions()
+{
+    redirect('E_service_and_form_Controller/add_suggestions', 'refresh');
+}
+
+// === คำถามที่พบบ่อย ===
+public function questions()
+{
+    redirect('E_service_and_form_Controller/questions', 'refresh');
+}
+
+// === การประเมิน ===
+public function assessment()
+{
+    redirect('E_service_and_form_Controller/assessment', 'refresh');
+}
+
+public function add_assessment()
+{
+    redirect('E_service_and_form_Controller/add_assessment', 'refresh');
+}
+	
+
+public function file_check($str)
+{
+    redirect('E_service_and_form_Controller/file_check/' . $str, 'refresh'); 
+}
+	
+	
+
+
+    // === Data and Information Controller Redirects ===
+    public function odata()
+    {
+        redirect('Data_and_Information/odata', 'refresh');
+    }
+	
+	public function site_map()
+{
+    redirect('Data_and_Information/site_map', 'refresh');  
+}
+
+public function site_map_detail($site_map_id)
+{
+    redirect('Data_and_Information/site_map_detail/' . $site_map_id, 'refresh'); 
+}
+
+public function increment_download_site_map($site_map_file_id)
+{
+    redirect('Data_and_Information/increment_download_site_map/' . $site_map_file_id, 'refresh'); 
+}
+
+    public function ita()
+    {
+        redirect('Data_and_Information/ita', 'refresh');
+    }
+	
+	   public function ita_all()
+    {
+        redirect('Data_and_Information/ita_all', 'refresh');
+    }
+
+    public function ita_year()
+    {
+        redirect('Data_and_Information/ita_year', 'refresh');
+    }
+
+    public function lpa()
+    {
+        redirect('Data_and_Information/lpa', 'refresh');
+    }
+
+    public function prov_local_doc()
+    {
+        redirect('Data_and_Information/prov_local_doc', 'refresh');
+    }
+	
+	// === ยังขาดใน Pages.php ===
+public function news_dla()
+{
+    redirect('Data_and_Information/news_dla', 'refresh');
+}
+
+public function odata_sub($odata_id)
+{
+    redirect('Data_and_Information/odata_sub/' . $odata_id, 'refresh');
+}
+
+public function odata_sub_file($odata_sub_id)
+{
+    redirect('Data_and_Information/odata_sub_file/' . $odata_sub_id, 'refresh');
+}
+
+public function ita_detail($ita_id)
+{
+    redirect('Data_and_Information/ita_detail/' . $ita_id, 'refresh');
+}
+
+public function ita_year_detail($ita_year_id)
+{
+    redirect('Data_and_Information/ita_year_detail/' . $ita_year_id, 'refresh');
+}
+
+public function lpa_detail($lpa_id)
+{
+    redirect('Data_and_Information/lpa_detail/' . $lpa_id, 'refresh');
+}
+
+public function increment_download_odata_sub_file($odata_sub_file_id)
+{
+    redirect('Data_and_Information/increment_download_odata_sub_file/' . $odata_sub_file_id, 'refresh');
+}
+
+public function increment_download_ita($ita_file_id)
+{
+    redirect('Data_and_Information/increment_download_ita/' . $ita_file_id, 'refresh');
+}
+
+public function increment_download_lpa($lpa_file_id)
+{
+    redirect('Data_and_Information/increment_download_lpa/' . $lpa_file_id, 'refresh');
+}
+	
+
+    // === Internal and Special Controller Redirects ===
+    public function intra_egp()
+    {
+        redirect('Internal_and_Special/intra_egp', 'refresh');
+    }
+
+    public function procurement_egp()
+    {
+        redirect('Internal_and_Special/procurement_egp', 'refresh');
+    }
+
+    public function announce_oap()
+    {
+        redirect('Internal_and_Special/announce_oap', 'refresh');
+    }
+
+    public function announce_win()
+    {
+        redirect('Internal_and_Special/announce_win', 'refresh');
+    }
+
+    public function ethics_strategy()
+    {
+        redirect('Internal_and_Special/ethics_strategy', 'refresh');
+    }
+	
+	public function egp()
+{
+    redirect('Internal_and_Special/egp', 'refresh');
+}
+
+// === ระบบค้นหาข้อมูลจัดซื้อจัดจ้าง (Procurement Search) ===
+public function procurement_tbl_w0_search()
+{
+    redirect('Internal_and_Special/procurement_tbl_w0_search', 'refresh');
+}
+
+public function procurement_tbl_p0_search()
+{
+    redirect('Internal_and_Special/procurement_tbl_p0_search', 'refresh');
+}
+
+public function procurement_tbl_15_search()
+{
+    redirect('Internal_and_Special/procurement_tbl_15_search', 'refresh');
+}
+
+public function procurement_tbl_b0_search()
+{
+    redirect('Internal_and_Special/procurement_tbl_b0_search', 'refresh');
+}
+
+public function procurement_tbl_d0_search()
+{
+    redirect('Internal_and_Special/procurement_tbl_d0_search', 'refresh');
+}
+
+public function procurement_tbl_d1_search()
+{
+    redirect('Internal_and_Special/procurement_tbl_d1_search', 'refresh');
+}
+
+public function procurement_tbl_w1_search()
+{
+    redirect('Internal_and_Special/procurement_tbl_w1_search', 'refresh');
+}
+
+public function procurement_tbl_d2_search()
+{
+    redirect('Internal_and_Special/procurement_tbl_d2_search', 'refresh');
+}
+
+public function procurement_tbl_w2_search()
+{
+    redirect('Internal_and_Special/procurement_tbl_w2_search', 'refresh');
+}
+
+// === Detail Functions ===
+public function announce_oap_detail($announce_oap_id)
+{
+    redirect('Internal_and_Special/announce_oap_detail/' . $announce_oap_id, 'refresh');
+}
+
+public function announce_win_detail($announce_win_id)
+{
+    redirect('Internal_and_Special/announce_win_detail/' . $announce_win_id, 'refresh');
+}
+
+public function ethics_strategy_detail($ethics_strategy_id)
+{
+    redirect('Internal_and_Special/ethics_strategy_detail/' . $ethics_strategy_id, 'refresh');
+}
+
+// === Download Functions ===
+public function increment_download_announce_oap($announce_oap_file_id)
+{
+    redirect('Internal_and_Special/increment_download_announce_oap/' . $announce_oap_file_id, 'refresh');
+}
+
+public function increment_download_announce_win($announce_win_file_id)
+{
+    redirect('Internal_and_Special/increment_download_announce_win/' . $announce_win_file_id, 'refresh');
+}
+
+public function increment_download_ethics_strategy($ethics_strategy_file_id)
+{
+    redirect('Internal_and_Special/increment_download_ethics_strategy/' . $ethics_strategy_file_id, 'refresh');
+}
+	
+	
+
+    // === User Management Controller Redirects ===
+    public function member_public()
+    {
+        redirect('User_Management_Controller/member_public', 'refresh');
+    }
+
+    public function member_public_list()
+    {
+        redirect('User_Management_Controller/member_public_list', 'refresh');
+    }
+
+    public function member_public_detail($member_id)
+    {
+        redirect('User_Management_Controller/member_public_detail/' . $member_id, 'refresh');
+    }
+	
+	public function form_login()
+{
+    redirect('User_Management_Controller/form_login', 'refresh');
+}
+
+public function form_register()
+{
+    redirect('User_Management_Controller/form_register', 'refresh');
+}
+
+public function forgot_password()
+{
+    redirect('User_Management_Controller/forgot_password', 'refresh');
+}
+
+// === ประมวลผลระบบสมาชิก ===
+public function login()
+{
+    redirect('User_Management_Controller/login', 'refresh');
+}
+
+public function register()
+{
+    redirect('User_Management_Controller/register', 'refresh');
+}
+
+public function logout()
+{
+    redirect('User_Management_Controller/logout', 'refresh');
+}
+
+// === จัดการโปรไฟล์ ===
+public function edit_profile()
+{
+    redirect('User_Management_Controller/edit_profile', 'refresh');
+}
+
+public function update_profile()
+{
+    redirect('User_Management_Controller/update_profile', 'refresh');
+}
+
+public function delete_account()
+{
+    redirect('User_Management_Controller/delete_account', 'refresh');
+}
+
+// === รีเซ็ตรหัสผ่าน ===
+public function reset_password_request()
+{
+    redirect('User_Management_Controller/reset_password_request', 'refresh');
+}
+
+public function reset_password($token = null)
+{
+    if ($token) {
+        redirect('User_Management_Controller/reset_password/' . $token, 'refresh');
+    } else {
+        redirect('User_Management_Controller/reset_password', 'refresh');
+    }
+}
+	
+	
+	
+	
+}

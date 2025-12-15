@@ -1,0 +1,12 @@
+@charset "utf-8";
+	.st0
+{
+	background : -moz-linear-gradient(0% 50% 0deg,rgba(173, 119, 49, 1) 0%,rgba(234, 188, 73, 1) 21%,rgba(241, 208, 98, 1) 30%,rgba(247, 226, 120, 1) 41%,rgba(250, 237, 134, 1) 52%,rgba(252, 241, 139, 1) 61%,rgba(246, 223, 117, 1) 67%,rgba(234, 188, 73, 1) 77%,rgba(173, 119, 49, 1) 100%);
+	background : -webkit-linear-gradient(0deg, rgba(173, 119, 49, 1) 0%, rgba(234, 188, 73, 1) 21%, rgba(241, 208, 98, 1) 30%, rgba(247, 226, 120, 1) 41%, rgba(250, 237, 134, 1) 52%, rgba(252, 241, 139, 1) 61%, rgba(246, 223, 117, 1) 67%, rgba(234, 188, 73, 1) 77%, rgba(173, 119, 49, 1) 100%);
+	background : -webkit-gradient(linear,0% 50% ,100% 50% ,color-stop(0,rgba(173, 119, 49, 1) ),color-stop(0.21,rgba(234, 188, 73, 1) ),color-stop(0.3,rgba(241, 208, 98, 1) ),color-stop(0.41,rgba(247, 226, 120, 1) ),color-stop(0.52,rgba(250, 237, 134, 1) ),color-stop(0.61,rgba(252, 241, 139, 1) ),color-stop(0.67,rgba(246, 223, 117, 1) ),color-stop(0.77,rgba(234, 188, 73, 1) ),color-stop(1,rgba(173, 119, 49, 1) ));
+	background : -o-linear-gradient(0deg, rgba(173, 119, 49, 1) 0%, rgba(234, 188, 73, 1) 21%, rgba(241, 208, 98, 1) 30%, rgba(247, 226, 120, 1) 41%, rgba(250, 237, 134, 1) 52%, rgba(252, 241, 139, 1) 61%, rgba(246, 223, 117, 1) 67%, rgba(234, 188, 73, 1) 77%, rgba(173, 119, 49, 1) 100%);
+	background : -ms-linear-gradient(0deg, rgba(173, 119, 49, 1) 0%, rgba(234, 188, 73, 1) 21%, rgba(241, 208, 98, 1) 30%, rgba(247, 226, 120, 1) 41%, rgba(250, 237, 134, 1) 52%, rgba(252, 241, 139, 1) 61%, rgba(246, 223, 117, 1) 67%, rgba(234, 188, 73, 1) 77%, rgba(173, 119, 49, 1) 100%);
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#AD7731', endColorstr='#AD7731' ,GradientType=0)";
+	background : linear-gradient(90deg, rgba(173, 119, 49, 1) 0%, rgba(234, 188, 73, 1) 21%, rgba(241, 208, 98, 1) 30%, rgba(247, 226, 120, 1) 41%, rgba(250, 237, 134, 1) 52%, rgba(252, 241, 139, 1) 61%, rgba(246, 223, 117, 1) 67%, rgba(234, 188, 73, 1) 77%, rgba(173, 119, 49, 1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#AD7731',endColorstr='#AD7731' , GradientType=1);
+}

@@ -1,0 +1,17 @@
+   User-agent: *
+   Disallow: /application/config/
+   Disallow: /application/controllers/
+   Disallow: /application/controllers_old/
+   Disallow: /application/cache/
+   Disallow: /application/logs/
+   Disallow: /application/core/
+   Disallow: /application/models/
+   Disallow: /application/libraries/
+   Disallow: /application/hooks/
+   Disallow: /system/
+   Disallow: /vender/
+   Disallow: /private/
+   Disallow: /tmp/
+   Allow: /
+
+   Sitemap: https://temp.go.th/temp-sitemap.xml
