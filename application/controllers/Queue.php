@@ -5093,14 +5093,14 @@ class Queue extends CI_Controller
         ];
 
         try {
-            // ดึงข้อมูล user ปัจจุบัน
+            // ดึงข้อมูล user
             $m_id = $this->session->userdata('m_id');
             if (!$m_id) {
                 return $permissions;
             }
 
-            // ดึงข้อมูล member และ position
-            $this->db->select('m.m_id, m.m_fname, m.m_lname, m.m_system, p.pid, p.pname');
+            // ดึงข้อมูล member
+            $this->db->select('m.m_id, m.m_fname, m.m_lname, m.m_system, m.grant_user_ref_id, p.pid, p.pname');
             $this->db->from('tbl_member m');
             $this->db->join('tbl_position p', 'm.ref_pid = p.pid', 'left');
             $this->db->where('m.m_id', $m_id);
@@ -5111,37 +5111,40 @@ class Queue extends CI_Controller
                 return $permissions;
             }
 
-            // ตรวจสอบสิทธิ์ตาม position
-            switch (intval($user_data->pid)) {
-                case 1: // System Admin
-                case 2: // Super Admin
+            // แปลงชื่อ role เป็น lowercase
+            $role = strtolower($user_data->m_system);
+
+            // แปลง grant_user_ref_id จาก string CSV เป็น array
+            $user_grants = !empty($user_data->grant_user_ref_id)
+                ? explode(',', $user_data->grant_user_ref_id)
+                : [];
+
+            // Trim whitespace และแปลงเป็น integer
+            $user_grants = array_map('intval', array_map('trim', $user_grants));
+
+            switch ($role) {
+                case 'system_admin':
+                case 'super_admin':
                     $permissions['can_view'] = true;
                     $permissions['can_update_status'] = true;
                     $permissions['can_delete'] = true;
                     $permissions['can_manage_all'] = true;
                     break;
 
-                case 3: // User Admin
-                    // ตรวจสอบสิทธิ์เพิ่มเติมใน tbl_grant_user
+                case 'user_admin':
                     $permissions['can_view'] = true;
 
-                    // ตรวจสอบว่ามีสิทธิ์ grant_user_id = 106 หรือไม่
-                    $this->db->select('grant_user_id');
-                    $this->db->from('tbl_grant_user');
-                    $this->db->where('grant_user_id', 106);
-                    $grant_check = $this->db->get()->row();
-
-                    if ($grant_check) {
+                    // ✅ ตรวจสอบว่ามีสิทธิ์ 106 ใน grant_user_ref_id หรือไม่
+                    if (in_array(106, $user_grants)) {
                         $permissions['can_update_status'] = true;
                     }
 
-                    // User Admin ไม่สามารถลบได้
                     $permissions['can_delete'] = false;
                     $permissions['can_manage_all'] = false;
                     break;
 
                 default:
-                    // ตำแหน่งอื่น ๆ ไม่มีสิทธิ์
+                    // บุคคลทั่วไป
                     $permissions['can_view'] = true;
                     $permissions['can_update_status'] = false;
                     $permissions['can_delete'] = false;
@@ -5149,7 +5152,9 @@ class Queue extends CI_Controller
                     break;
             }
 
-            log_message('info', 'Queue permissions for user ' . $m_id . ' (PID: ' . $user_data->pid . '): ' . json_encode($permissions));
+            log_message('info', 'Queue permissions for user ' . $m_id .
+                ' (ROLE: ' . $role . ', GRANTS: ' . implode(',', $user_grants) . '): ' .
+                json_encode($permissions));
 
         } catch (Exception $e) {
             log_message('error', 'Error checking queue management permissions: ' . $e->getMessage());

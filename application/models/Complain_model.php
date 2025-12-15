@@ -241,6 +241,15 @@ class Complain_model extends CI_Model
                     log_message('info', 'GUEST MODE: Using form data');
                 }
             }
+			
+		// *** เพิ่มส่วนนี้: ดึงข้อมูล IP และ Device ***
+        $user_ip = $this->get_user_ip();
+        $device_info = $this->get_device_info();
+        
+        log_message('info', 'User IP: ' . $user_ip);
+        log_message('info', 'Browser: ' . $device_info['browser']);
+        log_message('info', 'OS: ' . $device_info['os']);
+        log_message('info', 'Device: ' . $device_info['device']);
 
             // *** 8. เตรียมข้อมูลสำหรับบันทึก ***
             $complain_data = array(
@@ -256,7 +265,14 @@ class Complain_model extends CI_Model
                 'complain_user_id' => $user_data['user_id'],
                 'complain_user_type' => $user_data['user_type'],
                 'complain_status' => 'รอรับเรื่อง',
-                'complain_datesave' => date('Y-m-d H:i:s')
+                'complain_datesave' => date('Y-m-d H:i:s'),
+            
+            	// *** เพิ่มบรรทัดเหล่านี้ ***
+            	'complain_ip' => $user_ip,
+            	'complain_browser' => $device_info['browser'],
+            	'complain_os' => $device_info['os'],
+            	'complain_device' => $device_info['device'],
+            	'complain_user_agent' => $device_info['user_agent']
             );
 
             // *** 9. จัดการข้อมูลที่อยู่แยกย่อย ***
@@ -1662,4 +1678,132 @@ class Complain_model extends CI_Model
 
         return false; // หากไม่มีข้อมูลส่งกลับ false
     }
+	
+/**
+ * ดึง IP address ของผู้ใช้
+ * รองรับการใช้งานผ่าน Proxy/Load Balancer/CDN
+ */
+private function get_user_ip()
+{
+    // ตรวจสอบ IP จาก headers ต่างๆ ตามลำดับความสำคัญ
+    $ip_keys = array(
+        'HTTP_CF_CONNECTING_IP',  // Cloudflare
+        'HTTP_X_FORWARDED_FOR',   // Proxy/Load Balancer
+        'HTTP_X_REAL_IP',         // Nginx reverse proxy
+        'HTTP_CLIENT_IP',         // Proxy servers
+        'REMOTE_ADDR'             // Direct connection
+    );
+
+    foreach ($ip_keys as $key) {
+        if (array_key_exists($key, $_SERVER) === true) {
+            $ip = $_SERVER[$key];
+            
+            // กรณี X-Forwarded-For อาจมีหลาย IP คั่นด้วย comma
+            if (strpos($ip, ',') !== false) {
+                $ip_list = explode(',', $ip);
+                $ip = trim($ip_list[0]); // ใช้ IP แรก (client จริง)
+            }
+
+            $ip = trim($ip);
+
+            // Validate IP address (ไม่รับ Private/Reserved IPs)
+            if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
+                return $ip;
+            }
+        }
+    }
+
+    // Fallback: ใช้ REMOTE_ADDR แม้จะเป็น private IP
+    if (isset($_SERVER['REMOTE_ADDR'])) {
+        $ip = trim($_SERVER['REMOTE_ADDR']);
+        if (filter_var($ip, FILTER_VALIDATE_IP) !== false) {
+            return $ip;
+        }
+    }
+
+    return '0.0.0.0'; // Unknown
+}
+	
+	/**
+ * ดึงข้อมูล Browser, OS, และ Device
+ * ใช้ User Agent Class ของ CodeIgniter
+ */
+private function get_device_info()
+{
+    // โหลด User Agent library ของ CodeIgniter
+    $this->load->library('user_agent');
+
+    $device_info = array(
+        'browser' => 'Unknown',
+        'os' => 'Unknown',
+        'device' => 'Unknown',
+        'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Unknown'
+    );
+
+    try {
+        // ดึงข้อมูล Browser
+        if ($this->agent->is_browser()) {
+            $browser = $this->agent->browser();
+            $version = $this->agent->version();
+            $device_info['browser'] = $browser . ' ' . $version;
+        } elseif ($this->agent->is_robot()) {
+            $device_info['browser'] = 'Robot: ' . $this->agent->robot();
+        }
+
+        // ดึงข้อมูล Operating System
+        if ($this->agent->platform()) {
+            $device_info['os'] = $this->agent->platform();
+        }
+
+        // ระบุประเภทอุปกรณ์
+        if ($this->agent->is_mobile()) {
+            $device_info['device'] = 'Mobile';
+            
+            // ระบุรายละเอียดเพิ่มเติม
+            $mobile = $this->agent->mobile();
+            if ($mobile) {
+                $device_info['device'] = 'Mobile (' . $mobile . ')';
+            }
+        } elseif ($this->agent->is_robot()) {
+            $device_info['device'] = 'Bot/Crawler';
+        } else {
+            $device_info['device'] = 'Desktop';
+            
+            // ตรวจสอบเพิ่มเติมว่าเป็น Tablet หรือไม่
+            if ($this->is_tablet()) {
+                $device_info['device'] = 'Tablet';
+            }
+        }
+
+    } catch (Exception $e) {
+        log_message('error', 'Error getting device info: ' . $e->getMessage());
+    }
+
+    return $device_info;
+}
+	
+	/**
+ * ตรวจสอบว่าเป็น Tablet หรือไม่
+ * (CodeIgniter User Agent ไม่มีฟังก์ชันนี้มาให้)
+ */
+private function is_tablet()
+{
+    $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+    
+    // คำสำคัญที่ใช้ระบุ Tablet
+    $tablet_keywords = array(
+        'tablet', 'ipad', 'playbook', 'silk', 
+        'kindle', 'gt-p', 'sm-t', 'tab'
+    );
+
+    $user_agent_lower = strtolower($user_agent);
+
+    foreach ($tablet_keywords as $keyword) {
+        if (strpos($user_agent_lower, $keyword) !== false) {
+            return true;
+        }
+    }
+
+    return false;
+}
 }

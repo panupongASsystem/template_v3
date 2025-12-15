@@ -5710,7 +5710,21 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
 
   .position-3bg {
     width: 1920px;
+    height: 3500px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .position-3bg2 {
+    width: 1920px;
     height: 3000px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .position-3bg3 {
+    width: 1920px;
+    height: 2500px;
     overflow: hidden;
     position: relative;
   }
@@ -12971,5 +12985,117 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
 
   .logo-animate {
     animation: logoBounceIn 0.8s ease-out forwards;
+  }
+	
+  .bg-population {
+    background-image: url('<?php echo base_url("docs/bg-population.png"); ?>');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 1920px;
+    height: 500px;
+    z-index: 1;
+    position: relative;
+    overflow: hidden;
+  }
+	
+ .text-head-ci {
+    color: #FFF;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: inline-block;
+    /* margin-bottom: 29px; */
+  }
+
+  .text-head-ci2 {
+    color: #FFF;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    display: inline-block;
+    margin-bottom: 37px;
+  }
+
+  .text-head-ci3 {
+    color: #FFF;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  .population-container {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .population-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin-top: 148px;
+  }
+
+  .population-label {
+    color: #FFF;
+    text-align: center;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  .population-box {
+    width: 289.49px;
+    height: 125.865px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.80);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25) inset;
+    backdrop-filter: blur(2px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .population-box2 {
+    width: 327px;
+    height: 126px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.80);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25) inset;
+    backdrop-filter: blur(2px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .population-number {
+    color: #404040;
+    text-align: center;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  .text-head-ci4 {
+    color: #FFF;
+    text-align: center;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
   }
 </style>

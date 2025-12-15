@@ -163,26 +163,45 @@
 
                         <!-- Image Options -->
                         <div id="imageOptions" style="margin-top: 15px; display: none;">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="small">ขนาดรูปภาพ (%)</label>
-                                    <input type="range" class="form-control-range" id="imageScale" min="30" max="100"
-                                        value="100" oninput="updateScaleValue(this.value)">
-                                    <span id="scaleValue">100%</span>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="small">แปลงเป็นไฟล์</label>
-                                    <select class="form-control form-control-sm" id="convertType">
-                                        <option value="original">ไฟล์ต้นฉบับ</option>
-                                        <option value="image/jpeg">JPEG</option>
-                                        <option value="image/png">PNG</option>
-                                    </select>
+                            <div class="image-options-card">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="control-label-modern">ขนาดรูปภาพ (%)</label>
+                                        <input type="range" class="form-control-range modern-slider" id="imageScale" min="30" max="100" value="100" oninput="updateScaleValue(this.value)">
+                                        <span class="scale-value" id="scaleValue">100%</span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="control-label-modern">แปลงเป็นไฟล์</label>
+                                        <select class="form-control modern-select" id="convertType">
+                                            <option value="original">ไฟล์ต้นฉบับ</option>
+                                            <option value="image/jpeg">JPEG</option>
+                                            <option value="image/png">PNG</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="control-label-modern">หมุนภาพทั้งหมด</label>
+                                        <div class="btn-group-modern" role="group">
+                                            <button type="button" class="btn btn-modern" onclick="rotateImages(90)" title="หมุนขวา 90°">
+                                                <span class="rotate-icon">↻</span> 90°
+                                            </button>
+                                            <button type="button" class="btn btn-modern" onclick="rotateImages(180)" title="หมุน 180°">
+                                                <span class="rotate-icon">↻</span> 180°
+                                            </button>
+                                            <button type="button" class="btn btn-modern" onclick="rotateImages(270)" title="หมุนซ้าย 90°">
+                                                <span class="rotate-icon">↺</span> 90°
+                                            </button>
+                                            <button type="button" class="btn btn-modern btn-reset" onclick="rotateImages(0)" title="รีเซ็ต">
+                                                <span class="rotate-icon">⟲</span>
+                                            </button>
+                                        </div>
+                                        <small class="rotation-display">หมุน: <span id="rotationValue">0°</span></small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- แสดงตัวอย่างรูปที่เลือก -->
-                        <div id="file-preview" class="row g-2 mt-2"></div>
+                        <div id="file-preview"></div>
                     </div>
                 </div>
                 <br>
@@ -282,86 +301,6 @@
         text-overflow: ellipsis;
     }
 
-    .image-preview-item {
-        display: inline-block;
-        margin: 10px;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background: #f9f9f9;
-        text-align: center;
-    }
-
-    .image-preview-item img {
-        max-width: 150px;
-        max-height: 150px;
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .image-preview-item .image-info {
-        font-size: 12px;
-        color: #666;
-    }
-
-    #file-preview .preview-item {
-        position: relative;
-        margin-bottom: 5px;
-    }
-
-    #file-preview .preview-wrapper {
-        width: 100%;
-        padding-top: 75%;
-        position: relative;
-        overflow: hidden;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-
-    #file-preview img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        background-color: #f8f9fa;
-    }
-
-    #file-preview .preview-name {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba(0, 0, 0, 0.6);
-        color: white;
-        padding: 2px 5px;
-        font-size: 10px;
-        text-align: center;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .rotate-controls {
-        margin-top: 8px;
-        padding-top: 8px;
-        border-top: 1px solid #e0e0e0;
-    }
-
-    .rotate-controls .btn {
-        padding: 2px 6px;
-        font-size: 10px;
-        margin: 1px;
-    }
-
-    .rotation-indicator {
-        font-size: 10px;
-        color: #007bff;
-        font-weight: bold;
-        margin-top: 4px;
-    }
-
     .btn svg {
         vertical-align: middle;
         margin-top: -3px;
@@ -369,6 +308,364 @@
 
     .align-middle {
         vertical-align: middle;
+    }
+
+    /* ========== Image Options Card ========== */
+    .image-options-card {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .image-options-card .row {
+        margin-left: -8px;
+        margin-right: -8px;
+    }
+
+    .image-options-card .row > [class*="col-"] {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .control-label-modern {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 6px;
+    }
+
+    /* Modern Slider */
+    .modern-slider {
+        width: 100%;
+        height: 6px;
+        border-radius: 3px;
+        background: #dee2e6;
+        outline: none;
+        margin-bottom: 5px;
+    }
+
+    .modern-slider::-webkit-slider-thumb {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #007bff;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .modern-slider::-webkit-slider-thumb:hover {
+        background: #0056b3;
+        transform: scale(1.1);
+    }
+
+    .modern-slider::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #007bff;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+    }
+
+    .modern-slider::-moz-range-thumb:hover {
+        background: #0056b3;
+        transform: scale(1.1);
+    }
+
+    .scale-value {
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #007bff;
+        padding: 2px 8px;
+        background: #e7f3ff;
+        border-radius: 4px;
+    }
+
+    /* Modern Select */
+    .modern-select {
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        padding: 6px 10px;
+        font-size: 12px;
+        height: 34px;
+        transition: all 0.2s ease;
+        width: 100%;
+    }
+
+    .modern-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+    }
+
+    /* Modern Button Group */
+    .btn-group-modern {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+        margin-bottom: 6px;
+    }
+
+    .btn-modern {
+        padding: 6px 8px;
+        font-size: 12px;
+        font-weight: 500;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        background: #ffffff;
+        color: #495057;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        white-space: nowrap;
+    }
+
+    .btn-modern:hover {
+        background: #007bff;
+        border-color: #007bff;
+        color: #ffffff;
+        transform: translateY(-1px);
+    }
+
+    .btn-modern.btn-reset {
+        background: #ffffff;
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+
+    .btn-modern.btn-reset:hover {
+        background: #dc3545;
+        border-color: #dc3545;
+        color: #ffffff;
+    }
+
+    .rotate-icon {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .rotation-display {
+        display: block;
+        text-align: center;
+        font-size: 11px;
+        color: #6c757d;
+        margin-top: 6px;
+        font-weight: 500;
+    }
+
+    .rotation-display span {
+        color: #007bff;
+        font-weight: 600;
+    }
+
+    /* ========== Preview Container - Grid Layout ========== */
+    #file-preview {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    /* Preview Item Card */
+    .preview-item-card {
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .preview-item-card:hover {
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-1px);
+    }
+
+    /* Preview Image Wrapper */
+    .preview-image-wrapper {
+        width: 100%;
+        position: relative;
+        background: #f8f9fa;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 140px;
+        max-height: 160px;
+    }
+
+    /* Preview Image Container */
+    .preview-item-card img {
+        width: 100%;
+        height: auto;
+        max-height: 160px;
+        object-fit: contain;
+        display: block;
+    }
+
+    /* Preview Image Info */
+    .preview-info {
+        font-size: 10px;
+        color: #495057;
+        line-height: 1.4;
+        padding: 5px 0;
+    }
+
+    .preview-info strong {
+        display: block;
+        color: #212529;
+        font-size: 11px;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 600;
+    }
+
+    /* Rotate Controls in Preview */
+    .preview-rotate-controls {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid #e9ecef;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .preview-rotate-controls .btn-group {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3px;
+    }
+
+    .preview-rotate-controls .btn {
+        padding: 3px 5px;
+        font-size: 9px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+        font-weight: 500;
+    }
+
+    .preview-rotate-controls .btn:hover {
+        transform: scale(1.05);
+    }
+
+    .preview-rotate-controls .btn-outline-secondary {
+        border-color: #6c757d;
+        color: #6c757d;
+    }
+
+    .preview-rotate-controls .btn-outline-secondary:hover {
+        background: #6c757d;
+        color: #ffffff;
+    }
+
+    .preview-rotate-controls .btn-outline-danger {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+
+    .preview-rotate-controls .btn-outline-danger:hover {
+        background: #dc3545;
+        color: #ffffff;
+    }
+
+    .preview-rotation-indicator {
+        font-size: 9px;
+        color: #007bff;
+        font-weight: 600;
+        text-align: center;
+        padding: 3px 5px;
+        background: linear-gradient(135deg, #e7f3ff 0%, #cce5ff 100%);
+        border-radius: 4px;
+    }
+
+    /* ========== Responsive ========== */
+    @media (max-width: 768px) {
+        #file-preview {
+            grid-template-columns: 1fr;
+        }
+        
+        .btn-group-modern {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .preview-image-wrapper {
+            min-height: 120px;
+            max-height: 140px;
+        }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+        #file-preview {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (min-width: 1025px) {
+        #file-preview {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    /* ========== Loading State ========== */
+    .loading-preview {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+    .loading-preview::before {
+        content: "";
+        width: 20px;
+        height: 20px;
+        border: 3px solid #e9ecef;
+        border-top-color: #007bff;
+        border-radius: 50%;
+        margin-right: 10px;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Cover Preview */
+    .image-preview-item {
+        display: inline-block;
+        max-width: 300px;
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .image-preview-item img {
+        max-width: 300px;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .image-preview-item .image-info {
+        font-size: 13px;
+        color: #495057;
     }
 </style>
 
@@ -384,6 +681,28 @@
     function updateScaleValue(value) {
         console.log('[Scale] Changed to:', value + '%');
         document.getElementById('scaleValue').textContent = value + '%';
+    }
+
+    function rotateImages(degrees) {
+        console.log('[Rotate All] Rotating all images by:', degrees + '°');
+        
+        // อัพเดทมุมหมุนให้ทุกรูป
+        selectedFiles.forEach((file, index) => {
+            if (degrees === 0) {
+                imageRotations[index] = 0; // รีเซ็ต
+            } else {
+                if (!imageRotations[index]) {
+                    imageRotations[index] = 0;
+                }
+                imageRotations[index] = (imageRotations[index] + degrees) % 360;
+            }
+        });
+        
+        // อัพเดท UI แสดงมุมหมุน
+        document.getElementById('rotationValue').textContent = degrees === 0 ? '0°' : `+${degrees}°`;
+        
+        // สร้าง preview ใหม่ทั้งหมด
+        previewImages();
     }
 
     function rotateImage(index, degrees) {
@@ -459,21 +778,37 @@
                 const base64Length = previewUrl.length - 'data:image/png;base64,'.length;
                 const estimatedSize = (base64Length * 0.75) / 1024;
 
-                const previewCol = document.querySelector(`[data-image-index="${index}"]`);
-                if (previewCol) {
-                    const shortName = file.name.length > 10 ? file.name.substring(0, 8) + '...' : file.name;
-                    previewCol.innerHTML = `
-                        <div class="preview-item">
-                            <div class="preview-wrapper">
-                                <img src="${previewUrl}" class="img-fluid">
-                                <div class="preview-name" title="${file.name}\nขนาดใหม่: ${canvas.width}x${canvas.height}\nScale: ${(scale * 100).toFixed(0)}%\nประมาณ: ${estimatedSize.toFixed(2)} KB">${shortName}</div>
+                const previewCard = document.querySelector(`[data-image-index="${index}"]`);
+                if (previewCard) {
+                    previewCard.innerHTML = `
+                        <div class="preview-item-card">
+                            <div class="preview-image-wrapper">
+                                <img src="${previewUrl}" alt="Preview ${index + 1}">
                             </div>
-                            <div class="rotate-controls">
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="rotateImage(${index}, 90)" title="หมุนขวา 90°">↻ 90°</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="rotateImage(${index}, 180)" title="หมุน 180°">↻ 180°</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="rotateImage(${index}, 270)" title="หมุนซ้าย 90°">↺ 90°</button>
-                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="rotateImage(${index}, 0)" title="รีเซ็ต">⟲</button>
-                                <div class="rotation-indicator">หมุน: ${rotation}°</div>
+                            <div class="preview-info">
+                                <strong>${file.name}</strong><br>
+                                ขนาดเดิม: ${img.width} x ${img.height}<br>
+                                ขนาดใหม่: ${canvas.width} x ${canvas.height}<br>
+                                Scale: ${(scale * 100).toFixed(0)}%<br>
+                                Type: ${outputType}<br>
+                                ประมาณ: ${estimatedSize.toFixed(2)} KB
+                            </div>
+                            <div class="preview-rotate-controls">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="rotateImage(${index}, 90)" title="หมุนขวา 90°">
+                                        ↻ 90°
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="rotateImage(${index}, 180)" title="หมุน 180°">
+                                        ↻ 180°
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="rotateImage(${index}, 270)" title="หมุนซ้าย 90°">
+                                        ↺ 90°
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="rotateImage(${index}, 0)" title="รีเซ็ต">
+                                        ⟲
+                                    </button>
+                                </div>
+                                <div class="preview-rotation-indicator">หมุน: ${rotation}°</div>
                             </div>
                         </div>
                     `;
@@ -553,7 +888,7 @@
         isProcessing = true;
 
         const container = document.getElementById('file-preview');
-        container.innerHTML = '<p class="small text-muted">กำลังสร้างตัวอย่าง...</p>';
+        container.innerHTML = '<div class="loading-preview">กำลังสร้างตัวอย่าง...</div>';
 
         const scale = document.getElementById('imageScale').value / 100;
         const convertType = document.getElementById('convertType').value;
@@ -622,29 +957,42 @@
 
                     console.log('[Preview] File', index + 1, '- Estimated size:', estimatedSize.toFixed(2), 'KB');
 
-                    const col = document.createElement('div');
-                    col.className = 'col-lg-3 col-md-4 col-sm-6 col-6';
-                    col.setAttribute('data-image-index', index);
-
-                    const shortName = file.name.length > 10 ? file.name.substring(0, 8) + '...' : file.name;
-
-                    col.innerHTML = `
-                        <div class="preview-item">
-                            <div class="preview-wrapper">
-                                <img src="${previewUrl}" class="img-fluid">
-                                <div class="preview-name" title="${file.name}\nขนาดใหม่: ${canvas.width}x${canvas.height}\nScale: ${(scale * 100).toFixed(0)}%\nประมาณ: ${estimatedSize.toFixed(2)} KB">${shortName}</div>
+                    const div = document.createElement('div');
+                    div.setAttribute('data-image-index', index);
+                    div.innerHTML = `
+                        <div class="preview-item-card">
+                            <div class="preview-image-wrapper">
+                                <img src="${previewUrl}" alt="Preview ${index + 1}">
                             </div>
-                            <div class="rotate-controls">
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="rotateImage(${index}, 90)" title="หมุนขวา 90°">↻ 90°</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="rotateImage(${index}, 180)" title="หมุน 180°">↻ 180°</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="rotateImage(${index}, 270)" title="หมุนซ้าย 90°">↺ 90°</button>
-                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="rotateImage(${index}, 0)" title="รีเซ็ต">⟲</button>
-                                <div class="rotation-indicator">หมุน: ${rotation}°</div>
+                            <div class="preview-info">
+                                <strong>${file.name}</strong><br>
+                                ขนาดเดิม: ${img.width} x ${img.height}<br>
+                                ขนาดใหม่: ${canvas.width} x ${canvas.height}<br>
+                                Scale: ${(scale * 100).toFixed(0)}%<br>
+                                Type: ${outputType}<br>
+                                ประมาณ: ${estimatedSize.toFixed(2)} KB
+                            </div>
+                            <div class="preview-rotate-controls">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="rotateImage(${index}, 90)" title="หมุนขวา 90°">
+                                        ↻ 90°
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="rotateImage(${index}, 180)" title="หมุน 180°">
+                                        ↻ 180°
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="rotateImage(${index}, 270)" title="หมุนซ้าย 90°">
+                                        ↺ 90°
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="rotateImage(${index}, 0)" title="รีเซ็ต">
+                                        ⟲
+                                    </button>
+                                </div>
+                                <div class="preview-rotation-indicator">หมุน: ${rotation}°</div>
                             </div>
                         </div>
                     `;
 
-                    container.appendChild(col);
+                    container.appendChild(div);
 
                     completed++;
                     console.log('[Preview] Completed', completed, '/', selectedFiles.length);

@@ -69,7 +69,7 @@ class Home extends CI_Controller
 		$this->load->model('cmi_model');
 		$this->load->model('e_mag_model');
 		$this->load->model('lineoa_qrcode_model');
-
+		$this->load->model('announce_win_model');
 	}
 
 	public function main()
@@ -140,10 +140,10 @@ class Home extends CI_Controller
 
 
 		// ข่าวจัดซื้อจัดจ้าง E-GP (ถ้ามีจะเปิดใช้ภายหลัง)
-		// $data['procurement_egp_tbl_w0'] = $this->procurement_egp_model->get_tbl_w0_frontend();
-		// $data['procurement_egp_tbl_p0'] = $this->procurement_egp_model->get_tbl_p0_frontend();
-		// $data['procurement_egp_tbl_15'] = $this->procurement_egp_model->get_tbl_15_frontend();
-		// $data['procurement_egp_tbl_b0'] = $this->procurement_egp_model->get_tbl_b0_frontend();
+		$data['procurement_egp_tbl_w0'] = $this->procurement_egp_model->get_tbl_w0_frontend();
+		$data['procurement_egp_tbl_p0'] = $this->procurement_egp_model->get_tbl_p0_frontend();
+		$data['procurement_egp_tbl_15'] = $this->procurement_egp_model->get_tbl_15_frontend();
+		$data['procurement_egp_tbl_b0'] = $this->procurement_egp_model->get_tbl_b0_frontend();
 
 		// ปฏิทินกิจกรรม
 		$data['events'] = $this->calender_model->get_events();
@@ -193,8 +193,21 @@ class Home extends CI_Controller
 		$data['qBackground_personnel'] = $this->background_personnel_model->background_personnel_frontend();
 		$data['qCalender'] = $this->calender_model->calender_frontend();
 		$data['qActivity'] = $this->activity_model->activity_frontend();
+		
+		// 🆕 ตรวจสอบแหล่งข้อมูลประชากร
+		$ci_data_source = get_config_value('ci_data_source') ?: 'manual';
+		$data['ci_data_source'] = $ci_data_source;
+
+		if ($ci_data_source === 'api') {
+			// เรียกข้อมูลจาก API
+			$data['qCmi'] = $this->get_population_from_api();
+		} else {
+			// เรียกข้อมูลจาก database เหมือนเดิม
+			$data['qCmi'] = $this->cmi_model->get_population_summary();
+		}
 
 		$data['qEgp'] = $this->intra_egp_model->egp_frontend();
+		$data['qAnnounce_win'] = $this->announce_win_model->announce_win_frontend();
 
 		$data['qP_reb'] = $this->p_reb_model->p_reb_frontend();
 		$data['qP_rpo'] = $this->p_rpo_model->p_rpo_frontend();
@@ -233,6 +246,253 @@ class Home extends CI_Controller
 		return $data;
 	}
 
+		// 🆕 ฟังก์ชันเรียกข้อมูลประชากรจาก API (ย้อนหลัง 1 เดือน)
+	private function get_population_from_api()
+	{
+		log_message('info', '=== START get_population_from_api ===');
+
+		// ดึงข้อมูลที่อยู่จาก config
+		$province = get_config_value('province');
+		$district = get_config_value('district');
+		$subdistric = get_config_value('subdistric');
+		$zip_code = get_config_value('zip_code');
+
+		// ตรวจสอบว่ามีข้อมูลครบหรือไม่
+		if (empty($province) || empty($district) || empty($subdistric) || empty($zip_code)) {
+			log_message('warning', 'Missing address data in config - falling back to database');
+			return $this->cmi_model->get_population_summary();
+		}
+
+		// หารหัสที่อยู่
+		$location_codes = $this->get_location_codes($subdistric, $district, $province, $zip_code);
+
+		if (!$location_codes) {
+			log_message('error', 'Failed to get location codes - falling back to database');
+			return $this->cmi_model->get_population_summary();
+		}
+
+		// คำนวณเดือนย้อนหลัง 1 เดือน
+		$current_year = (int) date('Y') + 543;
+		$current_month = (int) date('m');
+		$current_month--;
+		if ($current_month < 1) {
+			$current_month = 12;
+			$current_year--;
+		}
+		$yymm = substr($current_year, -2) . str_pad($current_month, 2, '0', STR_PAD_LEFT);
+
+		// เรียก Population API
+		$api_url = "https://stat.bora.dopa.go.th/stat/statnew/connectSAPI/stat_forward.php?API=/api/statpophouse/v1/statpop/list?action=45&yymmBegin={$yymm}&yymmEnd={$yymm}&statType=0&statSubType=999&subType=99&cc={$location_codes['province_code']}&rcode={$location_codes['district_code']}&tt={$location_codes['subdistric_code']}";
+
+		log_message('info', 'Calling Population API: ' . $api_url);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $api_url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+
+		$response = curl_exec($ch);
+		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$curl_error = curl_error($ch);
+		curl_close($ch);
+
+		if ($http_code != 200 || empty($response)) {
+			log_message('error', 'API request failed - falling back to database');
+			return $this->cmi_model->get_population_summary();
+		}
+
+		$api_data = json_decode($response, true);
+
+		if (empty($api_data) || !is_array($api_data)) {
+			log_message('error', 'Invalid API response - falling back to database');
+			return $this->cmi_model->get_population_summary();
+		}
+
+		// คำนวณรวมจาก API
+		$total_man = 0;
+		$total_woman = 0;
+		$total_population = 0;
+
+		foreach ($api_data as $item) {
+			$total_man += isset($item['lssumtotMale']) ? (int)$item['lssumtotMale'] : 0;
+			$total_woman += isset($item['lssumtotFemale']) ? (int)$item['lssumtotFemale'] : 0;
+			$total_population += isset($item['lssumtotTot']) ? (int)$item['lssumtotTot'] : 0;
+		}
+
+		log_message('info', "API returned: Male={$total_man}, Female={$total_woman}, Total={$total_population}");
+		log_message('info', '=== END get_population_from_api ===');
+
+		return (object)[
+			'total_man' => $total_man,
+			'total_woman' => $total_woman,
+			'total_population' => $total_population
+		];
+	}
+
+	// 🆕 ฟังก์ชันหารหัสที่อยู่
+	private function get_location_codes($subdistric, $district, $province, $zip_code)
+	{
+		// 1. หารหัสจังหวัด
+		$province_code = $this->get_province_code($province);
+		if (!$province_code) {
+			return null;
+		}
+
+		// 2. เรียก Address API
+		if (strlen($zip_code) != 5) {
+			return null;
+		}
+
+		$api_url = "https://addr.assystem.co.th/index.php/zip_api/address/" . $zip_code;
+
+		$ch = curl_init($api_url);
+		curl_setopt_array($ch, [
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT => 10,
+			CURLOPT_SSL_VERIFYPEER => false
+		]);
+
+		$response = curl_exec($ch);
+		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+
+		if ($http_code != 200) {
+			return null;
+		}
+
+		$data = json_decode($response, true);
+
+		if (!isset($data['status']) || $data['status'] !== 'success' || !isset($data['data'])) {
+			return null;
+		}
+
+		// 3. หารหัสอำเภอและตำบล
+		$district_code = null;
+		$subdistric_code = null;
+
+		foreach ($data['data'] as $item) {
+			if (isset($item['amphoe_name']) && $this->compare_names($item['amphoe_name'], $district)) {
+				$district_code = $item['amphoe_code'];
+			}
+			if (isset($item['district_name']) && $this->compare_names($item['district_name'], $subdistric)) {
+				$subdistric_code = $item['district_code'];
+			}
+		}
+
+		if (!$district_code || !$subdistric_code) {
+			return null;
+		}
+
+		return [
+			'province_code' => $province_code,
+			'district_code' => $district_code,
+			'subdistric_code' => $subdistric_code
+		];
+	}
+
+	// 🆕 ฟังก์ชันหารหัสจังหวัด
+	private function get_province_code($province_name)
+	{
+		$provinces = [
+			'กรุงเทพมหานคร' => '10',
+			'สมุทรปราการ' => '11',
+			'นนทบุรี' => '12',
+			'ปทุมธานี' => '13',
+			'พระนครศรีอยุธยา' => '14',
+			'อ่างทอง' => '15',
+			'ลพบุรี' => '16',
+			'สิงห์บุรี' => '17',
+			'ชัยนาท' => '18',
+			'สระบุรี' => '19',
+			'ชลบุรี' => '20',
+			'ระยอง' => '21',
+			'จันทบุรี' => '22',
+			'ตราด' => '23',
+			'ฉะเชิงเทรา' => '24',
+			'ปราจีนบุรี' => '25',
+			'นครนายก' => '26',
+			'สระแก้ว' => '27',
+			'นครราชสีมา' => '30',
+			'บุรีรัมย์' => '31',
+			'สุรินทร์' => '32',
+			'ศรีสะเกษ' => '33',
+			'อุบลราชธานี' => '34',
+			'ยโสธร' => '35',
+			'ชัยภูมิ' => '36',
+			'อำนาจเจริญ' => '37',
+			'บึงกาฬ' => '38',
+			'หนองบัวลำภู' => '39',
+			'ขอนแก่น' => '40',
+			'อุดรธานี' => '41',
+			'เลย' => '42',
+			'หนองคาย' => '43',
+			'มหาสารคาม' => '44',
+			'ร้อยเอ็ด' => '45',
+			'กาฬสินธุ์' => '46',
+			'สกลนคร' => '47',
+			'นครพนม' => '48',
+			'มุกดาหาร' => '49',
+			'เชียงใหม่' => '50',
+			'ลำพูน' => '51',
+			'ลำปาง' => '52',
+			'อุตรดิตถ์' => '53',
+			'แพร่' => '54',
+			'น่าน' => '55',
+			'พะเยา' => '56',
+			'เชียงราย' => '57',
+			'แม่ฮ่องสอน' => '58',
+			'นครสวรรค์' => '60',
+			'อุทัยธานี' => '61',
+			'กำแพงเพชร' => '62',
+			'ตาก' => '63',
+			'สุโขทัย' => '64',
+			'พิษณุโลก' => '65',
+			'พิจิตร' => '66',
+			'เพชรบูรณ์' => '67',
+			'ราชบุรี' => '70',
+			'กาญจนบุรี' => '71',
+			'สุพรรณบุรี' => '72',
+			'นครปฐม' => '73',
+			'สมุทรสาคร' => '74',
+			'สมุทรสงคราม' => '75',
+			'เพชรบุรี' => '76',
+			'ประจวบคีรีขันธ์' => '77',
+			'นครศรีธรรมราช' => '80',
+			'กระบี่' => '81',
+			'พังงา' => '82',
+			'ภูเก็ต' => '83',
+			'สุราษฎร์ธานี' => '84',
+			'ระนอง' => '85',
+			'ชุมพร' => '86',
+			'สงขลา' => '90',
+			'สตูล' => '91',
+			'ตรัง' => '92',
+			'พัทลุง' => '93',
+			'ปัตตานี' => '94',
+			'ยะลา' => '95',
+			'นราธิวาส' => '96'
+		];
+
+		return isset($provinces[$province_name]) ? $provinces[$province_name] : null;
+	}
+
+	// 🆕 ฟังก์ชันเปรียบเทียบชื่อ (รองรับคำนำหน้า)
+	private function compare_names($name1, $name2)
+	{
+		$prefixes = ['อำเภอ', 'ตำบล', 'จังหวัด', 'เทศบาล', 'อบต.', 'ต.', 'อ.', 'จ.'];
+
+		foreach ($prefixes as $prefix) {
+			$name1 = str_replace($prefix, '', $name1);
+			$name2 = str_replace($prefix, '', $name2);
+		}
+
+		$name1 = trim($name1);
+		$name2 = trim($name2);
+
+		return $name1 === $name2;
+	}
+	
 	private function loadApiData()
 	{
 		// // URL of the Open API

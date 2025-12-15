@@ -622,6 +622,74 @@
             </div>
         </div>
     </div>
+	
+	<div class="bg-population">
+    <div class="image-container pin-delay-0 text-center" style="position: absolute; z-index: 5; top: 235px; left: 236px;">
+        <img src="<?php echo base_url('docs/pin-L-population.png'); ?>">
+    </div>
+    <div class="image-container pin-delay-1 text-center" style="position: absolute; z-index: 5; top: 105px; right: 112px;">
+        <img src="<?php echo base_url('docs/pin-R-population.png'); ?>">
+    </div>
+
+    <div class="content-population underline">
+        <div class="text-start" style="margin: 36px 72px; position: absolute;">
+            <span class="text-head-ci">จำนวนประชากร</span><br>
+            <span class="text-head-ci2">ในเขต<?php echo get_config_value('fname'); ?></span><br>
+            <span class="text-head-ci3">
+                ข้อมูลเดือน
+                <?php
+                // ถ้าเป็น API ให้แสดงเดือนย้อนหลัง 1 เดือน
+                if (isset($ci_data_source) && $ci_data_source === 'api') {
+                    $current_year = (int) date('Y') + 543;
+                    $current_month = (int) date('m');
+                    $current_month--;
+                    if ($current_month < 1) {
+                        $current_month = 12;
+                        $current_year--;
+                    }
+                    $months = ['', 'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+                    echo $months[$current_month] . ' พ.ศ.' . $current_year;
+                } else {
+                    // Manual mode - แสดงเดือนปัจจุบัน
+                    $months = ['', 'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+                    echo $months[date('n')] . ' พ.ศ.' . (date('Y') + 543);
+                }
+                ?>
+            </span>
+        </div>
+
+        <a href="<?php echo site_url('pages/ci'); ?>">
+            <div class="population-container">
+                <!-- Population Item 1 -->
+                <div class="population-item">
+                    <span class="population-label">เพศชาย</span>
+                    <div class="population-box">
+                        <span class="population-number"><?php echo number_format($qCmi->total_man ?? 0); ?>
+                            คน</span>
+                    </div>
+                </div>
+
+                <!-- Population Item 2 -->
+                <div class="population-item">
+                    <span class="population-label">เพศหญิง</span>
+                    <div class="population-box">
+                        <span class="population-number"><?php echo number_format($qCmi->total_woman ?? 0); ?>
+                            คน</span>
+                    </div>
+                </div>
+
+                <!-- Population Item 3 -->
+                <div class="population-item">
+                    <span class="population-label">รวมจำนวนประชากร</span>
+                    <div class="population-box2">
+                        <span class="population-number"><?php echo number_format($qCmi->total_population ?? 0); ?>
+                            คน</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
 
     <div class="bg-activity" id="activity">
         <div class="water-activity"></div>
@@ -1111,7 +1179,7 @@
                     <div class="tab-link" onclick="openTab('tab2')">
                         <!-- <img src="docs/news_button.png" alt="Tab 2"> -->
                         <div class="new-button">
-                            <span class="font-new-button">จัดซื้อจัดจ้าง e-GP</span>
+                            <span class="font-new-button">ประกาศผู้ชนะราคา</span>
                         </div>
                     </div>
                     <div class="tab-link" onclick="openTab('tab3')">
@@ -1522,14 +1590,13 @@
                         </div>
                     </div>
                     <div id="tab2" class="tab-content">
-                        <?php foreach ($qEgp as $egp) { ?>
+                        <?php foreach ($qAnnounce_win as $pcm) { ?>
                             <div class="content-news2-detail">
-                                <a href="https://process3.gprocurement.go.th/egp2procmainWeb/jsp/procsearch.sch?servlet=gojsp&proc_id=ShowHTMLFile&processFlows=Procure&projectId=<?= $egp->project_id; ?>&templateType=W2&temp_Announ=A&temp_itemNo=0&seqNo=1"
-                                    target="_blank">
+                                <a href="<?php echo site_url('Pages/announce_win_detail/' . $pcm->announce_win_id); ?>">
                                     <div class="row">
                                         <div class="col-8">
-                                            <span class="text-news"><img src="docs/e-gp.png" width="40px"
-                                                    style="margin-top: -5px;">&nbsp;&nbsp;<?= strip_tags($egp->project_name); ?></span>
+                                            <span class="text-news"><img
+                                                    src="docs/icon-public.png">&nbsp;&nbsp;<?= strip_tags($pcm->announce_win_name); ?></span>
                                         </div>
                                         <div class="col-4">
                                             <div class="row" style="margin-left: 170px;">
@@ -1537,43 +1604,13 @@
                                                     <div class="d-flex justify-content-start">
                                                         <span class="text-news-time">
                                                             <?php
-                                                            // สมมติว่าค่าที่ได้รับมาจากตัวแปร $rs['doc_date'] อยู่ในรูปแบบ "10 ม.ค. 67"
-                                                            $dateStr = $egp->transaction_date;
-
-                                                            // แปลงเดือนจากชื่อไทยย่อเป็นชื่อเต็ม
-                                                            $thaiMonths = [
-                                                                'ม.ค.' => 'มกราคม',
-                                                                'ก.พ.' => 'กุมภาพันธ์',
-                                                                'มี.ค.' => 'มีนาคม',
-                                                                'เม.ย.' => 'เมษายน',
-                                                                'พ.ค.' => 'พฤษภาคม',
-                                                                'มิ.ย.' => 'มิถุนายน',
-                                                                'ก.ค.' => 'กรกฎาคม',
-                                                                'ส.ค.' => 'สิงหาคม',
-                                                                'ก.ย.' => 'กันยายน',
-                                                                'ต.ค.' => 'ตุลาคม',
-                                                                'พ.ย.' => 'พฤศจิกายน',
-                                                                'ธ.ค.' => 'ธันวาคม',
-                                                            ];
-
-                                                            // แปลงเดือนใน $dateStr โดยใช้การแทนที่จาก array $thaiMonths
-                                                            foreach ($thaiMonths as $shortMonth => $fullMonth) {
-                                                                if (strpos($dateStr, $shortMonth) !== false) {
-                                                                    $dateStr = str_replace($shortMonth, $fullMonth, $dateStr);
-                                                                    break; // ออกจาก loop เมื่อเจอการแทนที่แล้ว
-                                                                }
-                                                            }
-
-                                                            // แปลงปีคริสต์ศักราช (สองหลัก) เป็นปีพุทธศักราช (สี่หลัก)
-                                                            preg_match('/\d{2}$/', $dateStr, $matches);
-                                                            if ($matches) {
-                                                                $year = $matches[0]; // ดึงตัวเลขสองหลักท้ายสุด ซึ่งคือปีในรูปแบบ 67
-                                                                $fullYear = (int) $year < 50 ? '25' . $year : '25' . $year; // เพิ่ม '25' ข้างหน้าปี
-                                                                $dateStr = str_replace($year, $fullYear, $dateStr); // แทนที่ปีด้วยปีที่เพิ่ม '25' ข้างหน้า
-                                                            }
-
-                                                            // แสดงผลลัพธ์
-                                                            echo $dateStr; // ตัวอย่างเช่น "10 มกราคม 2567"
+                                                            // ในการใช้งาน setThaiMonth
+                                                            $date = new DateTime($pcm->announce_win_date);
+                                                            $day_th = $date->format('d');
+                                                            $month_th = setThaiMonth($date->format('F')); // เรียกใช้ setThaiMonth สำหรับชื่อเดือน
+                                                            $year_th = $date->format('Y') + 543; // เพิ่มขึ้น 543 ปี
+                                                            $formattedDate = "$day_th $month_th $year_th"; // วันที่และเดือนเป็นภาษาไทย
+                                                            echo $formattedDate;
                                                             ?>
                                                         </span>
                                                     </div>
@@ -1581,13 +1618,13 @@
                                                 <div class="col-2" style="margin-top: -27px;">
                                                     <?php
                                                     // วันที่ของข่าว
-                                                    $contract_contract_date = new DateTime($egp->contract_contract_date);
+                                                    $announce_win_date = new DateTime($pcm->announce_win_date);
 
                                                     // วันที่ปัจจุบัน
                                                     $current_date = new DateTime();
 
                                                     // คำนวณหาความต่างของวัน
-                                                    $interval = $current_date->diff($contract_contract_date);
+                                                    $interval = $current_date->diff($announce_win_date);
                                                     $days_difference = $interval->days;
 
                                                     // ถ้ามากกว่า 30 วัน ให้ซ่อนไว้
@@ -1606,7 +1643,7 @@
                             </div>
                         <?php } ?>
                         <div class="d-flex justify-content-center underline" style="margin-top: 80px;">
-                            <a href="<?php echo site_url('pages/egp'); ?>">
+                            <a href="<?php echo site_url('pages/announce_win'); ?>">
                                 <div class="button-new2-all text-center">
                                     <span class="font-all-home">ดูทั้งหมด</span>
                                 </div>

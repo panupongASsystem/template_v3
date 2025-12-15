@@ -152,6 +152,7 @@ class Vision_model extends CI_Model
         // Update vision information
         $data = array(
             'vision_detail' => $this->input->post('vision_detail'),
+        	'vision_home_text' => $this->input->post('vision_home_text'), // เพิ่มบรรทัดนี้
             'vision_by' => $this->session->userdata('m_fname'), // เพิ่มชื่อคนที่แก้ไขข้อมูล
         );
 
@@ -382,11 +383,11 @@ class Vision_model extends CI_Model
         $this->db->update('tbl_vision_pdf');
     }
 
-    public function vision_frontend_home()
-    {
-        $this->db->select('vision_detail');  // เปลี่ยนจาก '*' เป็น 'vision_detail'
-        $this->db->from('tbl_vision');
-        $query = $this->db->get();
-        return $query->result();
-    }
+   public function vision_frontend_home()
+{
+    $this->db->select('vision_home_text');  // เปลี่ยนจาก vision_detail เป็น vision_home_text
+    $this->db->from('tbl_vision');
+    $query = $this->db->get();
+    return $query->result();
+}
 }
