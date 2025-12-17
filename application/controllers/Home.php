@@ -140,10 +140,10 @@ class Home extends CI_Controller
 
 
 		// ข่าวจัดซื้อจัดจ้าง E-GP (ถ้ามีจะเปิดใช้ภายหลัง)
-		$data['procurement_egp_tbl_w0'] = $this->procurement_egp_model->get_tbl_w0_frontend();
-		$data['procurement_egp_tbl_p0'] = $this->procurement_egp_model->get_tbl_p0_frontend();
-		$data['procurement_egp_tbl_15'] = $this->procurement_egp_model->get_tbl_15_frontend();
-		$data['procurement_egp_tbl_b0'] = $this->procurement_egp_model->get_tbl_b0_frontend();
+		// $data['procurement_egp_tbl_w0'] = $this->procurement_egp_model->get_tbl_w0_frontend();
+		// $data['procurement_egp_tbl_p0'] = $this->procurement_egp_model->get_tbl_p0_frontend();
+		// $data['procurement_egp_tbl_15'] = $this->procurement_egp_model->get_tbl_15_frontend();
+		// $data['procurement_egp_tbl_b0'] = $this->procurement_egp_model->get_tbl_b0_frontend();
 
 		// ปฏิทินกิจกรรม
 		$data['events'] = $this->calender_model->get_events();
