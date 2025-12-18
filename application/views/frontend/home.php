@@ -1306,7 +1306,7 @@
                                         <?php endif; ?>
                                     </div>
                                     <div class="d-flex justify-content-center underline" style="margin-top: 80px;">
-                                        <a href="<?php echo site_url('pages/procurement_tbl_w0_search'); ?>">
+                                        <a href="<?php echo site_url('pages/procurement_tbl_all_search'); ?>">
                                             <div class="button-new2-all text-center">
                                                 <span class="font-all-home">ดูทั้งหมด</span>
                                             </div>
@@ -1397,7 +1397,7 @@
                                         <?php endif; ?>
                                     </div>
                                     <div class="d-flex justify-content-center underline" style="margin-top: 80px;">
-                                        <a href="<?php echo site_url('pages/procurement_tbl_p0_search'); ?>">
+                                        <a href="<?php echo site_url('pages/procurement_tbl_all_search'); ?>">
                                             <div class="button-new2-all text-center">
                                                 <span class="font-all-home">ดูทั้งหมด</span>
                                             </div>
@@ -1488,7 +1488,7 @@
                                         <?php endif; ?>
                                     </div>
                                     <div class="d-flex justify-content-center underline" style="margin-top: 80px;">
-                                        <a href="<?php echo site_url('pages/procurement_tbl_15_search'); ?>">
+                                        <a href="<?php echo site_url('pages/procurement_tbl_all_search'); ?>">
                                             <div class="button-new2-all text-center">
                                                 <span class="font-all-home">ดูทั้งหมด</span>
                                             </div>
@@ -1579,7 +1579,7 @@
                                         <?php endif; ?>
                                     </div>
                                     <div class="d-flex justify-content-center underline" style="margin-top: 80px;">
-                                        <a href="<?php echo site_url('pages/procurement_tbl_b0_search'); ?>">
+                                        <a href="<?php echo site_url('pages/procurement_tbl_all_search'); ?>">
                                             <div class="button-new2-all text-center">
                                                 <span class="font-all-home">ดูทั้งหมด</span>
                                             </div>

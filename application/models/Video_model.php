@@ -307,13 +307,21 @@ class Video_model extends CI_Model
         $this->db->update('tbl_video');
     }
 
-public function get_latest_video()
-{
-    $this->db->where('tbl_video.video_status', 'show');
-    $this->db->order_by('video_date', 'DESC'); // ✅ เรียงตามวันที่ใหม่ล่าสุด
-    $this->db->limit(4);
-    $query = $this->db->get('tbl_video');
-    return $query->result();
-}
+    public function get_latest_video()
+    {
+        $this->db->where('tbl_video.video_status', 'show');
+        $this->db->order_by('video_date', 'DESC'); // ✅ เรียงตามวันที่ใหม่ล่าสุด
+        $this->db->limit(4);
+        $query = $this->db->get('tbl_video');
+        return $query->result();
+    }
 
+    public function get_latest_video_one()
+    {
+        $this->db->where('tbl_video.video_status', 'show'); // เพิ่มเงื่อนไขสถานะ ใช้สำหรับ template เก่าๆ
+        $this->db->order_by('video_id', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get('tbl_video');
+        return $query->row();
+    }
 }

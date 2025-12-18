@@ -101,11 +101,11 @@
                         <div class="mt-1"></div>
                         <a href="<?php echo site_url('Pages/elderly_aw_ods'); ?>" class="font-content-all-web">เบี้ยยังชีพผู้สูงอายุ / ผู้พิการ</a><br>
                         <div class="mt-1"></div>
-                        <a href="<?php echo site_url('Pages/adding_queue'); ?>" class="font-content-all-web">จองคิวติดต่อราชการออนไลน์</a><br>
+                        <a href="<?php echo site_url('Queue/adding_queue'); ?>" class="font-content-all-web">จองคิวติดต่อราชการออนไลน์</a><br>
                         <div class="mt-1"></div>
                         <a href="<?php echo site_url('Pages/pbsv_statistics'); ?>" class="font-content-all-web">ข้อมูลสถิติการให้บริการ</a><br>
-						<div class="mt-1"></div>
-						<a href="<?php echo site_url('Pages/e_mags_view'); ?>" class="font-content-all-web">วารสารออนไลน์</a><br>
+                        <div class="mt-1"></div>
+                        <a href="<?php echo site_url('Pages/e_mags_view'); ?>" class="font-content-all-web">วารสารออนไลน์</a><br>
                     </div>
                 </div>
                 <div class="content-all-web mt-4">
@@ -137,54 +137,61 @@
                     </div>
                 </div>
                 <div class="content-all-web mt-4">
-                    <span class="font-head-all-web"><?php
-                                                    $abbreviation = get_config_value('abbreviation');
-                                                    $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
-                                                    echo $canon;
-                                                    ?></span><br>
+                    <span class="font-head-all-web">
+                        <?php
+                        $abbreviation = get_config_value('abbreviation');
+                        $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
+                        echo $canon;
+                        ?></span><br>
                     <div class="underline mt-1 mb-1 pad-left-35">
-                        <a href="<?php echo site_url('Pages/canon_bgps'); ?>" class="font-content-all-web"><?php
-                                                                                                            $abbreviation = get_config_value('abbreviation');
-                                                                                                            $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
-                                                                                                            echo $canon;
-                                                                                                            ?>งบประมาณ</a><br>
+                        <a href="<?php echo site_url('Pages/canon_bgps'); ?>" class="font-content-all-web
+                        "><?php
+                            $abbreviation = get_config_value('abbreviation');
+                            $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
+                            echo $canon;
+                            ?>งบประมาณ</a><br>
                         <div class="mt-1"></div>
-                        <a href="<?php echo site_url('Pages/canon_chh'); ?>" class="font-content-all-web"><?php
-                                                                                                            $abbreviation = get_config_value('abbreviation');
-                                                                                                            $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
-                                                                                                            echo $canon;
-                                                                                                            ?>การควบคุมกิจการที่เป็นอันตรายต่อสุขภาพ</a><br>
+                        <a href="<?php echo site_url('Pages/canon_chh'); ?>" class="font-content-all-web">
+                            <?php
+                            $abbreviation = get_config_value('abbreviation');
+                            $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
+                            echo $canon;
+                            ?>การควบคุมกิจการที่เป็นอันตรายต่อสุขภาพ</a><br>
                         <div class="mt-1"></div>
-                        <a href="<?php echo site_url('Pages/canon_ritw'); ?>" class="font-content-all-web"><?php
-                                                                                                            $abbreviation = get_config_value('abbreviation');
-                                                                                                            $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
-                                                                                                            echo $canon;
-                                                                                                            ?>การติดตั้งระบบบำบัดน้ำเสียในอาคาร</a><br>
+                        <a href="<?php echo site_url('Pages/canon_ritw'); ?>" class="font-content-all-web">
+                            <?php
+                            $abbreviation = get_config_value('abbreviation');
+                            $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
+                            echo $canon;
+                            ?>การติดตั้งระบบบำบัดน้ำเสียในอาคาร</a><br>
                         <div class="mt-1"></div>
-                        <a href="<?php echo site_url('Pages/canon_market'); ?>" class="font-content-all-web"><?php
-                                                                                                                $abbreviation = get_config_value('abbreviation');
-                                                                                                                $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
-                                                                                                                echo $canon;
-                                                                                                                ?>ตลาด</a><br>
+                        <a href="<?php echo site_url('Pages/canon_market'); ?>" class="font-content-all-web">
+                            <?php
+                            $abbreviation = get_config_value('abbreviation');
+                            $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
+                            echo $canon;
+                            ?>ตลาด</a><br>
                         <div class="mt-1"></div>
-                        <a href="<?php echo site_url('Pages/canon_rmwp'); ?>" class="font-content-all-web"><?php
-                                                                                                            $abbreviation = get_config_value('abbreviation');
-                                                                                                            $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
-                                                                                                            echo $canon;
-                                                                                                            ?>การจัดการสิ่งปฏิกูลและมูลฝอย</a><br>
+                        <a href="<?php echo site_url('Pages/canon_rmwp'); ?>" class="font-content-all-web">
+                            <?php
+                            $abbreviation = get_config_value('abbreviation');
+                            $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
+                            echo $canon;
+                            ?>การจัดการสิ่งปฏิกูลและมูลฝอย</a><br>
                         <div class="mt-1"></div>
-                        <a href="<?php echo site_url('Pages/canon_rcsp'); ?>" class="font-content-all-web"><?php
-                                                                                                            $abbreviation = get_config_value('abbreviation');
-                                                                                                            $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
-                                                                                                            echo $canon;
-                                                                                                            ?>หลักเกณฑ์การคัดแยกมูลฝอย</a><br>
+                        <a href="<?php echo site_url('Pages/canon_rcsp'); ?>" class="font-content-all-web">
+                            <?php
+                            $abbreviation = get_config_value('abbreviation');
+                            $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
+                            echo $canon;
+                            ?>หลักเกณฑ์การคัดแยกมูลฝอย</a><br>
                         <div class="mt-1"></div>
-                        <a href="<?php echo site_url('Pages/canon_rcp'); ?>" class="font-content-all-web"><?php
-                                                                                                            $abbreviation = get_config_value('abbreviation');
-                                                                                                            $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
-                                                                                                            echo $canon;
-                                                                                                            ?>การควบคุมการเลี้ยงหรือปล่อยสุนัขและแมว</a><br>
-
+                        <a href="<?php echo site_url('Pages/canon_rcp'); ?>" class="font-content-all-web">
+                            <?php
+                            $abbreviation = get_config_value('abbreviation');
+                            $canon = ($abbreviation == 'อบต.') ? 'ข้อบัญญัติ' : 'เทศบัญญัติ';
+                            echo $canon;
+                            ?>การควบคุมการเลี้ยงหรือปล่อยสุนัขและแมว</a><br>
                     </div>
                 </div>
             </div>
@@ -254,7 +261,7 @@
                         <div class="mt-1"></div>
                         <a href="<?php echo site_url('Pages/p_reb'); ?>" class="font-content-all-web">รายงานการใช้จ่ายงบประมาณจัดซื้อจัดจ้าง</a><br>
                         <div class="mt-1"></div>
-                        <a href="<?php echo site_url('Pages/operation_report'); ?>" class="font-content-all-web">รายงานผลการดำเนินงาน อบต.</a><br>
+                        <a href="<?php echo site_url('Pages/operation_report'); ?>" class="font-content-all-web">รายงานผลการดำเนินงาน<?php echo get_config_value('abbreviation'); ?></a><br>
                         <div class="mt-1"></div>
                     </div>
                 </div>
@@ -268,9 +275,9 @@
                         <div class="mt-1"></div>
                         <a href="<?php echo site_url('Pages/follow_complain'); ?>" class="font-content-all-web">ติดตามเรื่องร้องเรียน</a><br>
                         <div class="mt-1"></div>
-                        <a href="<?php echo site_url('Pages/adding_suggestions'); ?>" class="font-content-all-web">ช่องทางรับฟังความคิดเห็น</a><br>
+                        <a href="<?php echo site_url('Suggestions/adding_suggestions'); ?>" class="font-content-all-web">ช่องทางรับฟังความคิดเห็น</a><br>
                         <div class="mt-1"></div>
-                        <a href="<?php echo site_url('Pages/adding_corruption'); ?>" class="font-content-all-web">แจ้งเรื่องทุจริตหน่วยงานภาครัฐ</a><br>
+                        <a href="<?php echo site_url('Corruption/report_form'); ?>" class="font-content-all-web">แจ้งเรื่องทุจริตหน่วยงานภาครัฐ</a><br>
                         <div class="mt-1"></div>
                         <a href="<?php echo site_url('Pages/q_a'); ?>" class="font-content-all-web">กระทู้ ถาม-ตอบ (Q&A)</a><br>
                         <div class="mt-1"></div>
@@ -301,7 +308,7 @@
                         <a href="<?php echo site_url('Pages/taepts_topic'); ?>" class="font-content-all-web">มาตรฐานการส่งเสริมคุณธรรมและความโปร่งใส</a><br>
                         <div class="mt-1"></div>
                         <a href="<?php echo site_url('Pages/ethics_strategy'); ?>" class="font-content-all-web">ประมวลผลจริยธรรมและการขับเคลื่อนจริยธรรม</a><br>
-						<div class="mt-1"></div>
+                        <div class="mt-1"></div>
                         <a href="<?php echo site_url('data_catalog'); ?>" class="font-content-all-web">ข้อมูลองค์กร (Data Catalog)</a><br>
                     </div>
                 </div>

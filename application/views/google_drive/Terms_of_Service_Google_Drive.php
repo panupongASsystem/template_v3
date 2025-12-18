@@ -12,7 +12,7 @@
 $current_date_th = "5 สิงหาคม " . (date('Y') + 543); // ปีไทย
 $current_domain = $_SERVER['HTTP_HOST'] ?? get_config_value('domain') . '.go.th';
 $company_name = $current_domain;
-$service_name = "Google Drive Integration";
+$service_name = "ระบบจัดเก็บข้อมูลแบบคลาวด์ (Cloud Storage)";
 
 // ข้อมูลบริษัท
 $company_info = [

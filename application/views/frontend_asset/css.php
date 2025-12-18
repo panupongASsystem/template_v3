@@ -1,135 +1,164 @@
 <!-- อยู่ที่ css view: views/frontend_asset/css.php -->
 
 <!-- ส่วนที่ 1: Dark Mode (มีอยู่แล้ว) -->
-<?php 
+<?php
 $dark_mode_enabled = get_config_value('dark_mode_enabled') ?? '0';
 ?>
 <?php if ($dark_mode_enabled == '1'): ?>
-<style>
-/* ========== BALANCED SOFT THEME ========== */
-/* โทนสีอ่อนพอดี สมดุล */
-html {
-    filter: grayscale(100%) contrast(1.05) brightness(1.05) !important;
-    background-color: #A8A8A8 !important;
-}
-/* รูปภาพ - ค่ากลาง */
-img, video, picture, canvas {
-    filter: grayscale(30%) contrast(1.0) brightness(1.05) 
-            saturate(0.6) opacity(1) !important;
-}
-/* SVG - ค่ากลาง */
-svg {
-    filter: invert(1) hue-rotate(180deg) grayscale(70%) 
-            brightness(1.1) contrast(0.9) opacity(0.95) !important;
-}
-/* รูปภาพที่เป็น Background */
-[style*="background-image"] {
-    filter: grayscale(30%) contrast(0.95) brightness(1.05) 
-            saturate(0.6) opacity(1) !important;
-}
-/* Google Maps */
-iframe[src*="google.com/maps"] {
-    filter: invert(1) hue-rotate(180deg) grayscale(100%) 
-            contrast(0.85) brightness(1.2) !important;
-}
-/* Scrollbar - ค่ากลาง */
-::-webkit-scrollbar {
-    background-color: #CCCCCC;
-    width: 12px;
-}
-::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 3px rgba(100,100,100,0.08);
-    border-radius: 6px;
-    background-color: #D8D8D8;
-}
-::-webkit-scrollbar-thumb {
-    background-color: #ADADAD;
-    border-radius: 6px;
-    border: 2px solid #CCCCCC;
-    box-shadow: 0 0 2px rgba(100,100,100,0.12);
-}
-::-webkit-scrollbar-thumb:hover {
-    background-color: #999999;
-    box-shadow: 0 0 3px rgba(100,100,100,0.18);
-}
-/* Text - เงาค่ากลาง */
-body, p, span, div, a, h1, h2, h3, h4, h5, h6 {
-    text-shadow: 0 0 0.3px rgba(100,100,100,0.15);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-/* ปุ่มและ Input */
-button, input, select, textarea {
-    filter: contrast(0.95) brightness(1.08) !important;
-    border: 1px solid rgba(140,140,140,0.25) !important;
-}
-/* Card และ Container - เงาค่ากลาง */
-.card, .box, .panel, [class*="container"] {
-    box-shadow: 0 1px 3px rgba(100,100,100,0.08), 
-                0 0 1px rgba(180,180,180,0.1) inset !important;
-}
-/* Icon */
-.icon, i, [class*="icon"] {
-    filter: drop-shadow(0 0 0.3px rgba(100,100,100,0.15)) 
-            contrast(0.95) brightness(1.1) !important;
-}
-/* Border ทั้งหมด */
-* {
-    border-color: rgba(140,140,140,0.25) !important;
-}
-</style>
+  <style>
+    /* ========== BALANCED SOFT THEME ========== */
+    /* โทนสีอ่อนพอดี สมดุล */
+    html {
+      filter: grayscale(100%) contrast(1.05) brightness(1.05) !important;
+      background-color: #A8A8A8 !important;
+    }
+
+    /* รูปภาพ - ค่ากลาง */
+    img,
+    video,
+    picture,
+    canvas {
+      filter: grayscale(30%) contrast(1.0) brightness(1.05) saturate(0.6) opacity(1) !important;
+    }
+
+    /* SVG - ค่ากลาง */
+    svg {
+      filter: invert(1) hue-rotate(180deg) grayscale(70%) brightness(1.1) contrast(0.9) opacity(0.95) !important;
+    }
+
+    /* รูปภาพที่เป็น Background */
+    [style*="background-image"] {
+      filter: grayscale(30%) contrast(0.95) brightness(1.05) saturate(0.6) opacity(1) !important;
+    }
+
+    /* Google Maps */
+    iframe[src*="google.com/maps"] {
+      filter: invert(1) hue-rotate(180deg) grayscale(100%) contrast(0.85) brightness(1.2) !important;
+    }
+
+    /* Scrollbar - ค่ากลาง */
+    ::-webkit-scrollbar {
+      background-color: #CCCCCC;
+      width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 3px rgba(100, 100, 100, 0.08);
+      border-radius: 6px;
+      background-color: #D8D8D8;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: #ADADAD;
+      border-radius: 6px;
+      border: 2px solid #CCCCCC;
+      box-shadow: 0 0 2px rgba(100, 100, 100, 0.12);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #999999;
+      box-shadow: 0 0 3px rgba(100, 100, 100, 0.18);
+    }
+
+    /* Text - เงาค่ากลาง */
+    body,
+    p,
+    span,
+    div,
+    a,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      text-shadow: 0 0 0.3px rgba(100, 100, 100, 0.15);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ปุ่มและ Input */
+    button,
+    input,
+    select,
+    textarea {
+      filter: contrast(0.95) brightness(1.08) !important;
+      border: 1px solid rgba(140, 140, 140, 0.25) !important;
+    }
+
+    /* Card และ Container - เงาค่ากลาง */
+    .card,
+    .box,
+    .panel,
+    [class*="container"] {
+      box-shadow: 0 1px 3px rgba(100, 100, 100, 0.08),
+        0 0 1px rgba(180, 180, 180, 0.1) inset !important;
+    }
+
+    /* Icon */
+    .icon,
+    i,
+    [class*="icon"] {
+      filter: drop-shadow(0 0 0.3px rgba(100, 100, 100, 0.15)) contrast(0.95) brightness(1.1) !important;
+    }
+
+    /* Border ทั้งหมด */
+    * {
+      border-color: rgba(140, 140, 140, 0.25) !important;
+    }
+  </style>
 <?php endif; ?>
 
 
 
 <!-- ส่วนที่ 2: Mourning Ribbon (เพิ่มใหม่) -->
-<?php 
+<?php
 $mourning_ribbon_enabled = get_config_value('mourning_ribbon_enabled') ?? '0';
 ?>
 <?php if ($mourning_ribbon_enabled == '1'): ?>
-<style>
-/* ========== MOURNING RIBBON (โบว์ไว้อาลัย) ========== */
-.mourning-ribbon {
-    position: fixed;
-    top: 80px;
-    left: 80px;
-    z-index: 999999;
-    width: 200px;
-    height: auto;
-    opacity: 1.0;
-    transition: all 0.3s ease;
-    pointer-events: none;
-}
-
-.mourning-ribbon img {
-    width: 100%;
-    height: auto;
-    display: block;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-}
-
-.mourning-ribbon:hover {
-    opacity: 1;
-    transform: scale(1.05);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
+  <style>
+    /* ========== MOURNING RIBBON (โบว์ไว้อาลัย) ========== */
     .mourning-ribbon {
+      position: fixed;
+      top: 80px;
+      left: 80px;
+      z-index: 999999;
+      width: 200px;
+      height: auto;
+      opacity: 1.0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    .mourning-ribbon img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+
+    .mourning-ribbon:hover {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .mourning-ribbon {
         top: 70px;
         right: 15px;
         width: 45px;
+      }
     }
-}
 
-@media (max-width: 480px) {
-    .mourning-ribbon {
+    @media (max-width: 480px) {
+      .mourning-ribbon {
         top: 60px;
         right: 10px;
         width: 40px;
+      }
     }
-}
-</style>
+  </style>
 <?php endif; ?>
 
 
@@ -139,8 +168,8 @@ $mourning_ribbon_enabled = get_config_value('mourning_ribbon_enabled') ?? '0';
 
 
 <style>
-/* ปุ่มควบคุมขนาดตัวอักษร */
-.font-size-controller {
+  /* ปุ่มควบคุมขนาดตัวอักษร */
+  .font-size-controller {
     position: fixed !important;
     left: 25px !important;
     bottom: 7px !important;
@@ -151,23 +180,23 @@ $mourning_ribbon_enabled = get_config_value('mourning_ribbon_enabled') ?? '0';
     flex-direction: column;
     gap: 15px;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
+  }
 
-.font-size-controller.hidden {
+  .font-size-controller.hidden {
     transform: translateX(-100px) !important;
     opacity: 0;
     pointer-events: none;
-}
+  }
 
-.font-size-controller button {
+  .font-size-controller button {
     width: 55px;
     height: 55px;
     border-radius: 50%;
     border: none;
     background: linear-gradient(145deg, #ffffff, #e6e6e6);
-    box-shadow: 
-        4px 4px 16px rgba(0, 0, 0, 0.18),
-        -4px -4px 16px rgba(255, 255, 255, 0.9);
+    box-shadow:
+      4px 4px 16px rgba(0, 0, 0, 0.18),
+      -4px -4px 16px rgba(255, 255, 255, 0.9);
     color: #333;
     font-size: 20px;
     font-weight: 700;
@@ -180,9 +209,9 @@ $mourning_ribbon_enabled = get_config_value('mourning_ribbon_enabled') ?? '0';
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(10px);
-}
+  }
 
-.font-size-controller button::before {
+  .font-size-controller button::before {
     content: '';
     position: absolute;
     top: -50%;
@@ -192,58 +221,68 @@ $mourning_ribbon_enabled = get_config_value('mourning_ribbon_enabled') ?? '0';
     background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     transform: rotate(45deg);
     transition: all 0.6s ease;
-}
+  }
 
-.font-size-controller button:hover::before {
+  .font-size-controller button:hover::before {
     left: 100%;
-}
+  }
 
-.font-size-controller button:hover {
+  .font-size-controller button:hover {
     transform: translateY(-3px) scale(1.08);
-    box-shadow: 
+    box-shadow:
       4px 4px 16px rgba(0, 0, 0, 0.25),
-        -4px -4px 16px rgba(255, 255, 255, 1),
-        0 0 20px rgba(66, 133, 244, 0.3);
-}
+      -4px -4px 16px rgba(255, 255, 255, 1),
+      0 0 20px rgba(66, 133, 244, 0.3);
+  }
 
-.font-size-controller button:active {
+  .font-size-controller button:active {
     transform: translateY(0) scale(1);
-    box-shadow: 
-        6px 6px 12px rgba(0, 0, 0, 0.15),
-        -6px -6px 12px rgba(255, 255, 255, 0.7),
-        inset 3px 3px 6px rgba(0, 0, 0, 0.1);
-}
+    box-shadow:
+      6px 6px 12px rgba(0, 0, 0, 0.15),
+      -6px -6px 12px rgba(255, 255, 255, 0.7),
+      inset 3px 3px 6px rgba(0, 0, 0, 0.1);
+  }
 
-.font-size-controller .increase-btn { color: #4CAF50; }
-.font-size-controller .increase-btn:hover {
+  .font-size-controller .increase-btn {
+    color: #4CAF50;
+  }
+
+  .font-size-controller .increase-btn:hover {
     color: #45a049;
     box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.25), -4px -4px 16px rgba(255, 255, 255, 1), 0 0 25px rgba(76, 175, 80, 0.4);
-}
+  }
 
-.font-size-controller .decrease-btn { color: #FF5722; }
-.font-size-controller .decrease-btn:hover {
+  .font-size-controller .decrease-btn {
+    color: #FF5722;
+  }
+
+  .font-size-controller .decrease-btn:hover {
     color: #E64A19;
     box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.25), -4px -4px 16px rgba(255, 255, 255, 1), 0 0 25px rgba(255, 87, 34, 0.4);
-}
+  }
 
-.font-size-controller .reset-btn { color: #2196F3; font-size: 18px; }
-.font-size-controller .reset-btn:hover {
+  .font-size-controller .reset-btn {
+    color: #2196F3;
+    font-size: 18px;
+  }
+
+  .font-size-controller .reset-btn:hover {
     color: #1976D2;
     box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.25), -4px -4px 16px rgba(255, 255, 255, 1), 0 0 25px rgba(33, 150, 243, 0.4);
-}
+  }
 
-.font-size-controller button .icon {
+  .font-size-controller button .icon {
     font-size: 22px;
     line-height: 1;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+  }
 
-.font-size-controller .reset-btn .icon {
+  .font-size-controller .reset-btn .icon {
     font-size: 20px;
-}
+  }
 
-/* ปุ่มซ่อน (× ขวาบน) */
-.font-size-hide-btn {
+  /* ปุ่มซ่อน (× ขวาบน) */
+  .font-size-hide-btn {
     position: absolute !important;
     top: -20px !important;
     right: -20px !important;
@@ -252,9 +291,9 @@ $mourning_ribbon_enabled = get_config_value('mourning_ribbon_enabled') ?? '0';
     border-radius: 50% !important;
     border: none !important;
     background: linear-gradient(145deg, #ff6b6b, #ff5252) !important;
-    box-shadow: 
-        4px 4px 16px rgba(0, 0, 0, 0.2),
-        -2px -2px 6px rgba(255, 255, 255, 0.1) !important;
+    box-shadow:
+      4px 4px 16px rgba(0, 0, 0, 0.2),
+      -2px -2px 6px rgba(255, 255, 255, 0.1) !important;
     color: white !important;
     font-size: 18px !important;
     font-weight: bold !important;
@@ -268,33 +307,33 @@ $mourning_ribbon_enabled = get_config_value('mourning_ribbon_enabled') ?? '0';
     padding: 0 !important;
     overflow: visible !important;
     outline: none !important;
-}
+  }
 
-.font-size-hide-btn::before {
+  .font-size-hide-btn::before {
     display: none !important;
-}
+  }
 
-.font-size-hide-btn:hover {
+  .font-size-hide-btn:hover {
     transform: scale(1.15) rotate(90deg) !important;
-    box-shadow: 
-        6px 6px 12px rgba(0, 0, 0, 0.25),
-        -3px -3px 8px rgba(255, 255, 255, 0.1),
-        0 0 15px rgba(255, 107, 107, 0.5) !important;
+    box-shadow:
+      6px 6px 12px rgba(0, 0, 0, 0.25),
+      -3px -3px 8px rgba(255, 255, 255, 0.1),
+      0 0 15px rgba(255, 107, 107, 0.5) !important;
     background: linear-gradient(145deg, #ff5252, #ff4444) !important;
     outline: none !important;
-}
+  }
 
-.font-size-hide-btn:active {
+  .font-size-hide-btn:active {
     transform: scale(0.9) !important;
     outline: none !important;
-}
+  }
 
-.font-size-hide-btn:focus {
+  .font-size-hide-btn:focus {
     outline: none !important;
-}
+  }
 
-/* ปุ่มแสดง (เมื่อซ่อน) */
-.font-size-toggle {
+  /* ปุ่มแสดง (เมื่อซ่อน) */
+  .font-size-toggle {
     position: fixed !important;
     left: 25px !important;
     bottom: 100px !important;
@@ -304,9 +343,9 @@ $mourning_ribbon_enabled = get_config_value('mourning_ribbon_enabled') ?? '0';
     border-radius: 50%;
     border: none;
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.75), rgba(230, 230, 230, 0.75));
-    box-shadow: 
-        4px 4px 16px rgba(0, 0, 0, 0.15),
-        -4px -4px 16px rgba(255, 255, 255, 0.9);
+    box-shadow:
+      4px 4px 16px rgba(0, 0, 0, 0.15),
+      -4px -4px 16px rgba(255, 255, 255, 0.9);
     color: #666;
     font-size: 18px;
     font-weight: 700;
@@ -318,42 +357,44 @@ $mourning_ribbon_enabled = get_config_value('mourning_ribbon_enabled') ?? '0';
     font-family: 'Noto Sans Thai', sans-serif;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-}
+  }
 
-.font-size-toggle.visible {
+  .font-size-toggle.visible {
     display: flex;
     animation: popIn 0.3s ease-out;
-}
+  }
 
-@keyframes popIn {
+  @keyframes popIn {
     0% {
-        transform: scale(0);
-        opacity: 0;
+      transform: scale(0);
+      opacity: 0;
     }
-    50% {
-        transform: scale(1.1);
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
 
-.font-size-toggle:hover {
+    50% {
+      transform: scale(1.1);
+    }
+
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .font-size-toggle:hover {
     transform: scale(1.15);
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(240, 240, 240, 0.95));
-    box-shadow: 
-        6px 6px 20px rgba(0, 0, 0, 0.2),
-        -6px -6px 20px rgba(255, 255, 255, 1),
-        0 0 15px rgba(66, 133, 244, 0.3);
+    box-shadow:
+      6px 6px 20px rgba(0, 0, 0, 0.2),
+      -6px -6px 20px rgba(255, 255, 255, 1),
+      0 0 15px rgba(66, 133, 244, 0.3);
     color: #333;
-}
+  }
 
-.font-size-toggle:active {
+  .font-size-toggle:active {
     transform: scale(0.95);
-}
+  }
 
-.font-size-notification {
+  .font-size-notification {
     position: fixed !important;
     left: 95px !important;
     bottom: 100px !important;
@@ -371,129 +412,186 @@ $mourning_ribbon_enabled = get_config_value('mourning_ribbon_enabled') ?? '0';
     opacity: 0;
     pointer-events: none;
     white-space: nowrap;
-}
+  }
 
-@keyframes fadeInOut {
-    0% { opacity: 0; transform: translateX(-15px); }
-    15% { opacity: 1; transform: translateX(0); }
-    85% { opacity: 1; transform: translateX(0); }
-    100% { opacity: 0; transform: translateX(15px); }
-}
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+      transform: translateX(-15px);
+    }
 
-@keyframes shake {
-    0%, 100% { transform: translateY(-3px) scale(1.08); }
-    10%, 30%, 50%, 70%, 90% { transform: translateY(-3px) scale(1.08) translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateY(-3px) scale(1.08) translateX(5px); }
-}
+    15% {
+      opacity: 1;
+      transform: translateX(0);
+    }
 
-/* คลาสสำหรับขนาดตัวอักษร */
-body[data-font-scale="75"] { --font-scale: 0.75; }
-body[data-font-scale="87"] { --font-scale: 0.875; }
-body[data-font-scale="100"] { --font-scale: 1; }
-body[data-font-scale="112"] { --font-scale: 1.125; }
-body[data-font-scale="125"] { --font-scale: 1.25; }
-body[data-font-scale="137"] { --font-scale: 1.375; }
-body[data-font-scale="150"] { --font-scale: 1.5; }
+    85% {
+      opacity: 1;
+      transform: translateX(0);
+    }
 
-/* Responsive */
-@media (max-width: 768px) {
+    100% {
+      opacity: 0;
+      transform: translateX(15px);
+    }
+  }
+
+  @keyframes shake {
+
+    0%,
+    100% {
+      transform: translateY(-3px) scale(1.08);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+      transform: translateY(-3px) scale(1.08) translateX(-5px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+      transform: translateY(-3px) scale(1.08) translateX(5px);
+    }
+  }
+
+  /* คลาสสำหรับขนาดตัวอักษร */
+  body[data-font-scale="75"] {
+    --font-scale: 0.75;
+  }
+
+  body[data-font-scale="87"] {
+    --font-scale: 0.875;
+  }
+
+  body[data-font-scale="100"] {
+    --font-scale: 1;
+  }
+
+  body[data-font-scale="112"] {
+    --font-scale: 1.125;
+  }
+
+  body[data-font-scale="125"] {
+    --font-scale: 1.25;
+  }
+
+  body[data-font-scale="137"] {
+    --font-scale: 1.375;
+  }
+
+  body[data-font-scale="150"] {
+    --font-scale: 1.5;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
     .font-size-controller {
-        left: 15px !important;
-        bottom: 40px !important;
-        gap: 12px;
+      left: 15px !important;
+      bottom: 40px !important;
+      gap: 12px;
     }
+
     .font-size-controller button {
-        width: 50px;
-        height: 50px;
-        font-size: 18px;
+      width: 50px;
+      height: 50px;
+      font-size: 18px;
     }
+
     .font-size-hide-btn {
-        width: 26px !important;
-        height: 26px !important;
-        font-size: 16px !important;
+      width: 26px !important;
+      height: 26px !important;
+      font-size: 16px !important;
     }
+
     .font-size-toggle {
-        left: 15px !important;
-        bottom: 40px !important;
-        width: 42px;
-        height: 42px;
-        font-size: 16px;
+      left: 15px !important;
+      bottom: 40px !important;
+      width: 42px;
+      height: 42px;
+      font-size: 16px;
     }
+
     .font-size-notification {
-        left: 75px !important;
-        bottom: 80px !important;
-        padding: 12px 20px;
-        font-size: 14px;
+      left: 75px !important;
+      bottom: 80px !important;
+      padding: 12px 20px;
+      font-size: 14px;
     }
-}
+  }
 </style>
 
 
 <style>
-    /* Container ลอยขวาล่าง - ขนาด 192x392 (250/1.3 × 509.6/1.3) */
-    .lineoa-messenger-container {
-        position: fixed;
-        right: 30px;
-        bottom: 300px;
-        width: 138.9px;
-        height: 283.1px;
-        background-image: url('<?php echo base_url("docs/frame_lineoa.png"); ?>');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        border-radius: 12px;
-        overflow: hidden;
-        z-index: 9999;
-    }
+  /* Container ลอยขวาล่าง - ขนาด 192x392 (250/1.3 × 509.6/1.3) */
+  .lineoa-messenger-container {
+    position: fixed;
+    right: 30px;
+    bottom: 300px;
+    width: 138.9px;
+    height: 283.1px;
+    background-image: url('<?php echo base_url("docs/frame_lineoa.png"); ?>');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 12px;
+    overflow: hidden;
+    z-index: 9999;
+  }
 
-    /* QR Code ตรงกลาง - มุมมน */
-    .lineoa-qrcode {
-        position: absolute;
-        top: 65%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+  /* QR Code ตรงกลาง - มุมมน */
+  .lineoa-qrcode {
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .lineoa-qrcode img {
+    display: block;
+    width: 110px;
+    height: 110px;
+    border-radius: 12px;
+  }
+
+  /* ปุ่มปิด - ลอยบนขวา */
+  .lineoa-close-btn {
+    position: absolute;
+    top: 0px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    z-index: 10;
+  }
+
+  /* Hidden */
+  .lineoa-messenger-container.hidden {
+    display: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .lineoa-messenger-container {
+      width: 150px;
+      height: 300px;
     }
 
     .lineoa-qrcode img {
-        display: block;
-        width: 110px;
-        height: 110px;
-        border-radius: 12px;
+      width: 90px;
+      height: 90px;
     }
-
-    /* ปุ่มปิด - ลอยบนขวา */
-    .lineoa-close-btn {
-        position: absolute;
-        top: 0px;
-        right: 8px;
-        width: 24px;
-        height: 24px;
-        background: rgba(0, 0, 0, 0.5);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-        font-size: 18px;
-        line-height: 1;
-        z-index: 10;
-    }
-
-    /* Hidden */
-    .lineoa-messenger-container.hidden {
-        display: none;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .lineoa-messenger-container {
-            width: 150px;
-            height: 300px;
-        }
-        .lineoa-qrcode img {
-            width: 90px;
-            height: 90px;
-        }
-    }
+  }
 </style>
 
 
@@ -1215,8 +1313,8 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
       transform: translateX(-100%);
     }
   }
-	
-	  .text-run-style {
+
+  .text-run-style {
     font-size: 26px;
     color: #404040;
     font-style: normal;
@@ -1552,7 +1650,7 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
     display: flex;
     justify-content: center;
     align-items: center;
-     /* margin-left: -30px; */
+    /* margin-left: -30px; */
   }
 
   .button-banner-container {
@@ -2017,7 +2115,7 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
     gap: 8px;
     flex-shrink: 0;
     border-radius: 24px;
-	/* background: rgba(255, 255, 255, 0.70);
+    /* background: rgba(255, 255, 255, 0.70);
 	backdrop-filter: blur(2px); */
   }
 
@@ -3681,7 +3779,7 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
     /* 153.627% */
   }
 
-    .font-head-all-web {
+  .font-head-all-web {
     color: #FFC23B;
     text-align: center;
 
@@ -5515,7 +5613,7 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
       transform: translateY(0);
     }
   }
-	
+
   .bg-E-book {
     background-image: url('<?php echo base_url("docs/bg-E-book.png"); ?>');
     width: 1408px;
@@ -6008,17 +6106,22 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
   }
 
   .bt-new-dla {
+    display: inline-block;
+    /* เปลี่ยนจาก flex เป็น inline-block */
+    vertical-align: middle;
+    /* จัดให้อยู่กึ่งกลางแนวตั้ง */
     border-radius: 2px;
     background: var(--Red-Line, linear-gradient(0deg, #B3140E -8.23%, #D9281E 32.92%, #DF3026 39.41%, #EA3C35 52.41%, #EE413A 64.32%, #FD5B47 100.05%));
     width: 44px;
-    height: 16.343px;
-    display: flex;
-    align-items: center;
-    /* จัดข้อความในแนวตั้ง */
-    justify-content: center;
-    /* จัดข้อความในแนวนอน */
-    padding-left: 7px;
-    margin-top: 10px;
+    height: 22px;
+    text-align: center;
+    /* จัดข้อความตรงกลาง */
+    line-height: 10px;
+    /* ให้ข้อความอยู่กึ่งกลางแนวตั้ง */
+    margin-right: 8px;
+    /* เว้นระยะห่างจากหัวข้อข่าว */
+    margin-top: 5px;
+    /* ลบ margin-top */
   }
 
   .text-new-dla {
@@ -6028,10 +6131,29 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    width: 32.686px;
-    height: 23.886px;
-    flex-shrink: 0;
-    padding-top: 3px;
+    padding-top: 0;
+    /* ลบ padding-top */
+  }
+
+  .procurement-type-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    /* ป้องกันข้อความตัด */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  /* ปรับ link ให้อยู่บรรทัดเดียวกับ new */
+  .font-pages-content a {
+    display: inline;
+    vertical-align: middle;
   }
 
   .bt-new-dla-other {
@@ -10274,7 +10396,7 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
     flex: 1 1 auto;
     padding: 1.25rem;
   }
-	
+
   .bg-e-magazine {
     background-image: url('<?php echo base_url("docs/bg-e-magazine.png"); ?>');
     height: 500px;
@@ -10283,8 +10405,8 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
     overflow: hidden;
     margin: auto;
   }
-	
-	  .bg-statistics {
+
+  .bg-statistics {
     background-image: url('<?php echo base_url("docs/bg-statistics.png"); ?>');
     height: 300px;
     width: 1920px;
@@ -10375,7 +10497,7 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
   .btn-statistics5 {
     background-image: url('<?php echo base_url("docs/bg-statistics-all.png"); ?>');
   }
-	
+
   .bg-link-dla {
     background-image: url('<?php echo base_url("docs/bg-link-dla.png"); ?>');
     background-repeat: no-repeat;
@@ -10520,6 +10642,15 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
 
   .font-link-dla {
     color: #000;
+    text-shadow: 1px 1px 0 #fff,
+      -1px -1px 0 #fff,
+      1px -1px 0 #fff,
+      -1px 1px 0 #fff,
+      0 1px 0 #fff,
+      1px 0 0 #fff,
+      0 -1px 0 #fff,
+      -1px 0 0 #fff,
+      2px 3px 4px rgba(0, 0, 0, 0.25);
     font-size: 32px;
     font-style: normal;
     font-weight: 600;
@@ -12911,8 +13042,8 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
   }
 
   /* ***************************************** */
-	
-	/* โครงสร้างบุคลากรใหม่ =================================== */
+
+  /* โครงสร้างบุคลากรใหม่ =================================== */
   .structure-dropdown-container {
     display: flex;
     gap: 50px;
@@ -12947,23 +13078,25 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
     color: #999;
     margin-right: 4px;
   }
+
   /* ========================================================== */
 
-	
-	/* preview img Fancybo start =========================================== */
+
+  /* preview img Fancybo start =========================================== */
   .gallery-item {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     border-radius: 10px;
     overflow: hidden;
-}
+  }
 
-.gallery-item:hover {
+  .gallery-item:hover {
     transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-}
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  }
+
   /* preview img Fancybo end =========================================== */
-	  @keyframes logoBounceIn {
+  @keyframes logoBounceIn {
     0% {
       opacity: 0;
       transform: scale(0.3);
@@ -12986,7 +13119,7 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
   .logo-animate {
     animation: logoBounceIn 0.8s ease-out forwards;
   }
-	
+
   .bg-population {
     background-image: url('<?php echo base_url("docs/bg-population.png"); ?>');
     background-repeat: no-repeat;
@@ -12997,8 +13130,8 @@ body[data-font-scale="150"] { --font-scale: 1.5; }
     position: relative;
     overflow: hidden;
   }
-	
- .text-head-ci {
+
+  .text-head-ci {
     color: #FFF;
     text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     font-size: 40px;

@@ -16,6 +16,7 @@
                     <div class="custom-select-egp ">
                         <?php $selectedOption = $this->session->userdata('selected_option'); ?>
                         <select id="searchOption" class="form-control">
+							<option value="procurement_tbl_all_search" <?= ($selectedOption == 'procurement_tbl_all_search') ? 'selected' : ''; ?>>ทั้งหมด</option>
                             <option value="procurement_tbl_w0_search" <?= ($selectedOption == 'procurement_tbl_w0_search') ? 'selected' : ''; ?>>ประกาศรายชื่อผู้ชนะการเสนอราคา</option>
                             <option value="procurement_tbl_p0_search" <?= ($selectedOption == 'procurement_tbl_p0_search') ? 'selected' : ''; ?>>แผนการจัดซื้อจัดจ้าง</option>
                             <option value="procurement_tbl_15_search" <?= ($selectedOption == 'procurement_tbl_15_search') ? 'selected' : ''; ?>>ประกาศราคากลาง</option>
@@ -62,90 +63,117 @@
         <br>
 
         <?php
-        $count = count($query);
-        $itemsPerPage = 25; // จำนวนรายการต่อหน้า
-        $totalPages = ceil($count / $itemsPerPage);
+$count = count($query);
+$itemsPerPage = 25;
+$totalPages = ceil($count / $itemsPerPage);
 
-        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+$currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
 
-        // ปรับตำแหน่งที่กำหนดค่า $numToShow
-        $numToShow = 3; // จำนวนปุ่มที่ต้องการแสดง
-        $half = floor($numToShow / 2);
+$numToShow = 3;
+$half = floor($numToShow / 2);
 
-        $startPage = max($currentPage - $half, 1);
-        $endPage = min($startPage + $numToShow - 1, $totalPages);
+$startPage = max($currentPage - $half, 1);
+$endPage = min($startPage + $numToShow - 1, $totalPages);
 
-        $startIndex = ($currentPage - 1) * $itemsPerPage;
-        $endIndex = min($startIndex + $itemsPerPage - 1, $count - 1);
+$startIndex = ($currentPage - 1) * $itemsPerPage;
+$endIndex = min($startIndex + $itemsPerPage - 1, $count - 1);
 
-        for ($i = $startIndex; $i <= $endIndex; $i++) {
-            $rs = $query[$i];
-        ?>
-            <div class="pages-select-dla">
-                <div class="row">
-                    <div class="col-3 span-time-pages-news">
-                        <span>
-							<img src="<?php echo base_url('docs/icon-calender-egp.png'); ?>">&nbsp;&nbsp;
-                            <?php
-                            if (!function_exists('formatDateThai')) {
-                                function formatDateThai($dateStr)
-                                {
-                                    $thaiMonths = [
-                                        '01' => 'มกราคม',
-                                        '02' => 'กุมภาพันธ์',
-                                        '03' => 'มีนาคม',
-                                        '04' => 'เมษายน',
-                                        '05' => 'พฤษภาคม',
-                                        '06' => 'มิถุนายน',
-                                        '07' => 'กรกฎาคม',
-                                        '08' => 'สิงหาคม',
-                                        '09' => 'กันยายน',
-                                        '10' => 'ตุลาคม',
-                                        '11' => 'พฤศจิกายน',
-                                        '12' => 'ธันวาคม',
-                                    ];
+// ฟังก์ชันแปลงชื่อตารางเป็นชื่อประเภทภาษาไทย
+if (!function_exists('getTableTypeName')) {
+    function getTableTypeName($tableName) {
+        $types = [
+            'tbl_w0' => 'ประกาศรายชื่อผู้ชนะการเสนอราคา',
+            'tbl_p0' => 'แผนการจัดซื้อจัดจ้าง',
+            'tbl_15' => 'ประกาศราคากลาง',
+            'tbl_b0' => 'ร่างเอกสารประกวดราคา (e Bidding) และร่างเอกสารซื้อหรือจ้างด้วยวิธีสอบราคา',
+            'tbl_d0' => 'ประกาศเชิญชวน',
+            'tbl_d1' => 'ยกเลิกประกาศเชิญชวน',
+            'tbl_w1' => 'ยกเลิกประกาศรายชื่อผู้ชนะการเสนอราคา',
+            'tbl_d2' => 'เปลี่ยนแปลงประกาศเชิญชวน',
+            'tbl_w2' => 'เปลี่ยนแปลงประกาศรายชื่อผู้ชนะการเสนอราคา'
+        ];
+        return isset($types[$tableName]) ? $types[$tableName] : '';
+    }
+}
 
-                                    $date = new DateTime($dateStr);
-                                    $day = $date->format('d');
-                                    $month = $date->format('m');
-                                    $year = $date->format('Y') + 543; // แปลงปี ค.ศ. เป็น พ.ศ.
+for ($i = $startIndex; $i <= $endIndex; $i++) {
+    $rs = $query[$i];
+?>
+    <div class="pages-select-dla">
+        <div class="row mt-2">
+            <div class="col-2 span-time-pages-news">
+                <span>
+                    <img src="<?php echo base_url('docs/icon-calender-egp.png'); ?>">&nbsp;&nbsp;
+                    <?php
+                    if (!function_exists('formatDateThai')) {
+                        function formatDateThai($dateStr)
+                        {
+                            $thaiMonths = [
+                                '01' => 'มกราคม',
+                                '02' => 'กุมภาพันธ์',
+                                '03' => 'มีนาคม',
+                                '04' => 'เมษายน',
+                                '05' => 'พฤษภาคม',
+                                '06' => 'มิถุนายน',
+                                '07' => 'กรกฎาคม',
+                                '08' => 'สิงหาคม',
+                                '09' => 'กันยายน',
+                                '10' => 'ตุลาคม',
+                                '11' => 'พฤศจิกายน',
+                                '12' => 'ธันวาคม',
+                            ];
 
-                                    return $day . ' ' . $thaiMonths[$month] . ' ' . $year;
-                                }
-                            }
+                            $date = new DateTime($dateStr);
+                            $day = $date->format('d');
+                            $month = $date->format('m');
+                            $year = $date->format('Y') + 543;
 
-                            // ตัวอย่างการใช้งาน
-                            echo formatDateThai($rs['item_date']);
-                            ?>
-                        </span>
-                    </div>
-                    <div class="col-1">
-                        <?php
-                        // วันที่ของข่าว
-                        $item_date = new DateTime($rs['item_date']);
-
-                        // วันที่ปัจจุบัน
-                        $current_date = new DateTime();
-
-                        // คำนวณหาความต่างของวัน
-                        $interval = $current_date->diff($item_date);
-                        $days_difference = $interval->days;
-
-                        // ถ้ามากกว่า 30 วัน ให้ซ่อนไว้
-                        if ($days_difference <= 30) {
-                            // แสดงรูปภาพ
-                            echo '<div class="bt-new-dla"><span class="text-new-dla">new</span></div>';
+                            return $day . ' ' . $thaiMonths[$month] . ' ' . $year;
                         }
-                        ?>
-                    </div>
-                    <div class="col-8 font-pages-content ">
-                        <a class="underline" href="<?php echo $rs['item_url']; ?>" target="_blank">
-                            <?php echo $rs['item_title']; ?>
-                        </a>
-                    </div>
-                </div>
+                    }
+                    echo formatDateThai($rs['item_date']);
+                    ?>
+                </span>
             </div>
-        <?php } ?>
+            
+            <?php if ($selectedOption == 'procurement_tbl_all_search') : ?>
+            <div class="col-2">
+                <?php 
+                // แสดงประเภทเฉพาะเมื่อเลือก "ดูทั้งหมด"
+                if (isset($rs['source_table'])) {
+                    $typeName = getTableTypeName($rs['source_table']);
+                    if (!empty($typeName)) {
+                        echo '<span class="procurement-type-badge">
+                                <i class="fa fa-tag"></i> ' . $typeName . '
+                              </span>';
+                    }
+                }
+                ?>
+            </div>
+            <div class="col-8 font-pages-content" style="padding-top: 1px;">
+            <?php else : ?>
+            <div class="col-10 font-pages-content" style="padding-top: 1px;">
+            <?php endif; ?>
+                <a class="underline" href="<?php echo $rs['item_url']; ?>" target="_blank">
+                    <?php echo $rs['item_title']; ?>
+                </a>
+				
+				 <?php
+                // คำนวณหาความต่างของวัน
+                $item_date = new DateTime($rs['item_date']);
+                $current_date = new DateTime();
+                $interval = $current_date->diff($item_date);
+                $days_difference = $interval->days;
+
+                // แสดง new badge ถ้าไม่เกิน 30 วัน
+                if ($days_difference <= 30) {
+                    echo '<div class="bt-new-dla"><span class="text-new-dla">new</span></div>';
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+<?php } ?>
         <!-- จัดการหน้า -->
         <div class="pagination-container d-flex justify-content-end">
             <div class="pagination-pages">
@@ -264,6 +292,19 @@
         </div>
     </div>
 </div><br><br><br>
+
+<style>
+.procurement-type-badge {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 3px 10px;
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+}
+</style>
 
 <script>
      // input date thai ******************************************************* */

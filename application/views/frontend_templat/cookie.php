@@ -7,7 +7,7 @@
                 คุณสามารถเลือกตั้งค่าความยินยอมการใช้คุกกี้ได้ โดยคลิก "การตั้งค่าคุกกี้"</p>
             <div class="cookie-buttons">
                 <button id="show-details" class="btn-secondary">การตั้งค่าคุกกี้</button>
-				<a href="<?php echo site_url('Policy/cookie'); ?>" class="btn-secondary" style="text-decoration: none;" >นโยบาย การใช้งานคุ๊กกี้</a>
+                <a href="<?php echo site_url('Policy/cookie'); ?>" class="btn-secondary" style="text-decoration: none;">นโยบาย การใช้งานคุ๊กกี้</a>
                 <button id="accept-cookie" class="btn-primary">ยอมรับทั้งหมด</button>
             </div>
         </div>
@@ -67,6 +67,7 @@
     </div>
 
     <style>
+        /* CSS เดิมทั้งหมด - ไม่เปลี่ยน */
         .cookie-banner {
             position: fixed;
             bottom: 20px;
@@ -105,9 +106,7 @@
             display: flex;
             gap: 0.75rem;
             margin-left: auto;
-            /* ดันปุ่มทั้งหมดไปทางขวา */
         }
-
 
         .btn-primary {
             background: #2563eb;
@@ -140,7 +139,6 @@
             border-color: #d1d5db;
         }
 
-        /* Modal Styles */
         .modal {
             position: fixed;
             top: 0;
@@ -151,7 +149,6 @@
             z-index: 2000;
         }
 
-        /* ปรับปรุงส่วน Modal Content */
         .cookie-section {
             padding: 20px;
             border-bottom: 1px solid #E5E7EB;
@@ -181,7 +178,6 @@
             font-size: 14px;
         }
 
-        /* Toggle Switch */
         .switch {
             position: relative;
             display: inline-block;
@@ -266,7 +262,6 @@
             font-size: 14px;
         }
 
-        /* ปรับแต่งปุ่มปิด */
         .close {
             position: absolute;
             right: 1.5rem;
@@ -283,23 +278,60 @@
     </style>
 
     <script>
+        // ========================================
+        // Browser Fingerprint Generator
+        // ========================================
+        async function generateFingerprint() {
+            try {
+                const components = {
+                    screenResolution: `${screen.width}x${screen.height}`,
+                    screenColorDepth: screen.colorDepth,
+                    userAgent: navigator.userAgent,
+                    language: navigator.language,
+                    platform: navigator.platform,
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    timezoneOffset: new Date().getTimezoneOffset(),
+                    hardwareConcurrency: navigator.hardwareConcurrency || 'unknown',
+                    deviceMemory: navigator.deviceMemory || 'unknown',
+                    cookieEnabled: navigator.cookieEnabled,
+                    doNotTrack: navigator.doNotTrack || 'unknown'
+                };
+
+                const fingerprintString = JSON.stringify(components);
+                const fingerprint = await hashString(fingerprintString);
+                
+                return fingerprint;
+            } catch (error) {
+                console.error('Fingerprint error:', error);
+                return await hashString(navigator.userAgent + screen.width + screen.height);
+            }
+        }
+
+        async function hashString(str) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(str);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
+        }
+
+        // ========================================
+        // Cookie Consent
+        // ========================================
         document.addEventListener('DOMContentLoaded', function() {
-            // ตรวจสอบว่าเคยยอมรับคุกกี้หรือยัง
             if (!getCookie('cookie')) {
                 document.getElementById('cookie-consent').style.display = 'block';
             }
 
-            // เมื่อกดปุ่มยอมรับทั้งหมด
             document.getElementById('accept-cookie').addEventListener('click', function() {
-                // เซ็ตให้ติ๊กทุก checkbox
                 document.getElementById('analytics-cookie').checked = true;
                 document.getElementById('marketing-cookie').checked = true;
-                acceptCookie('selected');
+                acceptCookie();
             });
 
-            // เมื่อกดปุ่มยืนยันตัวเลือก
             document.querySelector('.confirm-btn').addEventListener('click', function() {
-                acceptCookie('selected');
+                acceptCookie();
             });
 
             // Modal Controls
@@ -322,28 +354,19 @@
             }
         });
 
-        // เพิ่มฟังก์ชันเช็คสถานะ checkbox
-        function getSelectedCookieTypes() {
-            return {
-                analytics: document.getElementById('analytics-cookie').checked,
-                marketing: document.getElementById('marketing-cookie').checked
-            };
-        }
+        async function acceptCookie() {
+            try {
+                // สร้าง fingerprint
+                const fingerprint = await generateFingerprint();
+                localStorage.setItem('browser_fingerprint', fingerprint);
 
-        // แก้ไขฟังก์ชัน acceptCookie
-        function acceptCookie(type) {
-            let cookieTypes = {
-                analytics: false,
-                marketing: false
-            };
+                const cookieTypes = {
+                    analytics: document.getElementById('analytics-cookie').checked,
+                    marketing: document.getElementById('marketing-cookie').checked
+                };
 
-            // เอาเงื่อนไข type === 'all' ออก เพราะเราจะเช็คจาก checkbox อย่างเดียว
-            cookieTypes = {
-                analytics: document.getElementById('analytics-cookie').checked,
-                marketing: document.getElementById('marketing-cookie').checked
-            };
-
-            fetch('<?php echo base_url("Cookie/accept"); ?>', {
+                // ส่งข้อมูล (เหมือนเดิม + fingerprint)
+                const response = await fetch('<?php echo base_url("Cookie/accept"); ?>', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -351,19 +374,36 @@
                     body: JSON.stringify({
                         session_id: '<?php echo session_id(); ?>',
                         device: navigator.userAgent,
+                        fingerprint: fingerprint,
                         analytics: cookieTypes.analytics,
                         marketing: cookieTypes.marketing
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('cookie-consent').style.display = 'none';
-                        document.getElementById('cookie-modal').style.display = 'none';
-                        setCookie('cookie', 'accepted', 30);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+                });
+
+                // แก้ไข: รับ response เป็น text ก่อน แล้วค่อย parse
+                const responseText = await response.text();
+                
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    // ถ้า parse ไม่ได้ ให้ถือว่า success
+                    console.warn('Response is not JSON, assuming success');
+                    data = { success: true };
+                }
+
+                // ซ่อน banner เสมอ (ไม่ว่า API จะตอบอะไร)
+                document.getElementById('cookie-consent').style.display = 'none';
+                document.getElementById('cookie-modal').style.display = 'none';
+                setCookie('cookie', 'accepted', 30);
+
+            } catch (error) {
+                console.error('Error:', error);
+                // แม้ error ก็ให้ซ่อน banner (UX ที่ดี)
+                document.getElementById('cookie-consent').style.display = 'none';
+                document.getElementById('cookie-modal').style.display = 'none';
+                setCookie('cookie', 'accepted', 30);
+            }
         }
 
         function setCookie(name, value, days) {

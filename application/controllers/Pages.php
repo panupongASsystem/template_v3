@@ -169,8 +169,8 @@ class Pages extends CI_Controller
         $this->load->model('member_public_model');
 
         $this->load->model('e_mag_model');
-		
-		$this->load->model('population_cache_model');
+
+        $this->load->model('population_cache_model');
 
 
         $this->load->library('vulgar_check');
@@ -390,7 +390,6 @@ class Pages extends CI_Controller
             }
 
             return false;
-
         } catch (Exception $e) {
             log_message('error', 'Exception in createTopicDeleteNotification: ' . $e->getMessage());
             return false;
@@ -1452,7 +1451,7 @@ class Pages extends CI_Controller
     {
         // อ่านค่า config แหล่งข้อมูล
         $ci_data_source = get_config_value('ci_data_source') ?: 'manual';
-        
+
         log_message('info', 'CI Page - Data source mode: ' . $ci_data_source);
 
         // ✅ ถ้าเป็นโหมด Manual → ใช้ข้อมูลจาก Database
@@ -1552,7 +1551,7 @@ class Pages extends CI_Controller
         if (!empty($api_data)) {
             // ✅ API สำเร็จ → บันทึกลง Database
             log_message('info', 'CI Population - Step 2: API success (' . count($api_data) . ' records), saving to database');
-            
+
             $save_result = $this->population_cache_model->save_api_data(
                 $selected_yymm,
                 $api_data,
@@ -1578,7 +1577,7 @@ class Pages extends CI_Controller
 
         // ⚠️ API ล้มเหลว → ลอง Fallback to Database Cache
         log_message('warning', 'CI Population - Step 2: API failed, trying database cache');
-        
+
         $cached_data = $this->population_cache_model->get_cached_data(
             $selected_yymm,
             $province_code,
@@ -1674,31 +1673,31 @@ class Pages extends CI_Controller
         $result = [];
         foreach ($data as $item) {
             $obj = new stdClass();
-            
+
             // ข้อมูลพื้นฐาน
             $obj->ci_name = $item['lsmmDesc'];
             $obj->ci_home = '-';
-            
+
             // ข้อมูลไทย
             $obj->male_thai = (int)$item['lssumtotMaleThai'];
             $obj->female_thai = (int)$item['lssumtotFemaleThai'];
             $obj->total_thai = (int)$item['lssumtotTotThai'];
-            
+
             // ข้อมูลทั้งหมด
             $obj->male_all = (int)$item['lssumtotMale'];
             $obj->female_all = (int)$item['lssumtotFemale'];
             $obj->total_all = (int)$item['lssumtotTot'];
-            
+
             // คำนวณต่างชาติ
             $obj->male_foreign = $obj->male_all - $obj->male_thai;
             $obj->female_foreign = $obj->female_all - $obj->female_thai;
             $obj->total_foreign = $obj->male_foreign + $obj->female_foreign;
-            
+
             // Backward compatibility
             $obj->ci_man = $obj->male_thai;
             $obj->ci_woman = $obj->female_thai;
             $obj->ci_total = $obj->total_thai;
-            
+
             // ⭐ เก็บข้อมูลดิบ (สำหรับบันทึก DB)
             $obj->lsmmDesc = $item['lsmmDesc'];
             $obj->lsmmCode = isset($item['lsmmCode']) ? $item['lsmmCode'] : null;
@@ -1723,43 +1722,43 @@ class Pages extends CI_Controller
     private function get_location_codes_for_population($subdistric, $district, $province, $zip_code)
     {
         log_message('info', 'Getting location codes for population API');
-        
+
         $province_code = $this->get_province_code_by_name($province);
         if (!$province_code) {
             log_message('error', 'Province code not found for: ' . $province);
             return null;
         }
-        
+
         if (!$zip_code || strlen($zip_code) != 5) {
             log_message('error', 'Invalid zipcode: ' . $zip_code);
             return null;
         }
-        
+
         $api_url = "https://addr.assystem.co.th/index.php/zip_api/address/" . $zip_code;
-        
+
         $ch = curl_init($api_url);
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => 10,
             CURLOPT_SSL_VERIFYPEER => false
         ]);
-        
+
         $response = curl_exec($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        
+
         if ($http_code != 200) {
             log_message('error', 'Address API returned HTTP ' . $http_code);
             return null;
         }
-        
+
         $data = json_decode($response, true);
-        
+
         if (!isset($data['status']) || $data['status'] !== 'success' || !isset($data['data'])) {
             log_message('error', 'Address API returned invalid data');
             return null;
         }
-        
+
         $district_code = null;
         foreach ($data['data'] as $item) {
             if (isset($item['amphoe_name']) && $this->compare_thai_names($item['amphoe_name'], $district)) {
@@ -1768,7 +1767,7 @@ class Pages extends CI_Controller
                 break;
             }
         }
-        
+
         $subdistric_code = null;
         foreach ($data['data'] as $item) {
             if (isset($item['district_name']) && $this->compare_thai_names($item['district_name'], $subdistric)) {
@@ -1777,12 +1776,12 @@ class Pages extends CI_Controller
                 break;
             }
         }
-        
+
         if (!$district_code || !$subdistric_code) {
             log_message('error', 'Missing codes');
             return null;
         }
-        
+
         return [
             'province_code' => $province_code,
             'district_code' => $district_code,
@@ -1874,7 +1873,7 @@ class Pages extends CI_Controller
             '95' => ['ยะลา', 'Yala'],
             '96' => ['นราธิวาส', 'Narathiwat']
         ];
-        
+
         foreach ($provinces as $code => $names) {
             foreach ($names as $name) {
                 if ($this->compare_thai_names($name, $province_name)) {
@@ -1882,7 +1881,7 @@ class Pages extends CI_Controller
                 }
             }
         }
-        
+
         return null;
     }
 
@@ -5128,7 +5127,6 @@ class Pages extends CI_Controller
             $this->load->view('frontend_asset/js');
             $this->load->view('frontend_templat/footer');
             log_message('info', '--- สิ้นสุดการทำงานของฟังก์ชัน q_a ---');
-
         } catch (Exception $e) {
             log_message('error', 'Q&A page error: ' . $e->getMessage());
             show_error('เกิดข้อผิดพลาดในการโหลดหน้า Q&A');
@@ -5305,7 +5303,6 @@ class Pages extends CI_Controller
                 $this->session->set_flashdata('save_success', 'บันทึกกระทู้สำเร็จ ขอบคุณที่ส่งคำถาม');
                 $this->session->set_flashdata('new_qa_id', $result);
                 redirect('Pages/q_a');
-
             } else {
                 log_message('error', 'adding_q_a: FAILED - Model returned false');
 
@@ -5507,7 +5504,6 @@ class Pages extends CI_Controller
                 $this->session->set_flashdata('save_error', $error_message);
                 redirect('Pages/adding_q_a');
             }
-
         } catch (Exception $e) {
             log_message('error', 'Controller Exception in add_q_a: ' . $e->getMessage());
 
@@ -5623,7 +5619,6 @@ class Pages extends CI_Controller
             log_message('debug', 'check_form: All vulgar words found: ' . implode(', ', array_unique($all_vulgar_words)));
 
             return $final_result;
-
         } catch (Exception $e) {
             log_message('error', 'check_form: Exception caught: ' . $e->getMessage());
             log_message('error', 'check_form: Stack trace: ' . $e->getTraceAsString());
@@ -5812,7 +5807,6 @@ class Pages extends CI_Controller
                 $this->session->set_flashdata('save_success', 'บันทึกการตอบกลับสำเร็จ');
                 $this->session->set_flashdata('new_reply_id', $result);
                 redirect('Pages/q_a');
-
             } else {
                 log_message('error', 'add_reply_q_a: FAILED - Model returned false');
 
@@ -5837,7 +5831,6 @@ class Pages extends CI_Controller
                 $this->session->set_flashdata('save_error', $error_message);
                 redirect('Pages/q_a');
             }
-
         } catch (Exception $e) {
             log_message('error', 'add_reply_q_a: Controller Exception: ' . $e->getMessage());
             log_message('error', 'add_reply_q_a: Exception trace: ' . $e->getTraceAsString());
@@ -6097,7 +6090,6 @@ class Pages extends CI_Controller
             $data['notifications'] = $this->notification_lib->get_user_notifications('public', 5);
             $data['unread_count'] = $this->notification_lib->get_unread_count('public');
             $data['total_notifications'] = $this->Notification_model->count_notifications_by_role('public');
-
         } catch (Exception $e) {
             log_message('error', 'Failed to load notifications in service_systems: ' . $e->getMessage());
 
@@ -6419,7 +6411,6 @@ class Pages extends CI_Controller
             }
 
             return false;
-
         } catch (Exception $e) {
             log_message('error', 'Exception in createReplyNotification: ' . $e->getMessage());
             return false;
@@ -6684,7 +6675,6 @@ class Pages extends CI_Controller
 
                     $uploaded_count++;
                     log_message('info', "Reply Image uploaded successfully: {$uploaded_filename} for Reply ID: {$reply_id}");
-
                 } else {
                     $upload_errors = $this->upload->display_errors('', '');
                     log_message('error', "Reply Image upload failed for file {$i}: {$upload_errors}");
@@ -6708,7 +6698,6 @@ class Pages extends CI_Controller
             }
 
             return true;
-
         } catch (Exception $e) {
             log_message('error', 'process_reply_images exception: ' . $e->getMessage());
             log_message('error', 'Stack trace: ' . $e->getTraceAsString());
@@ -6814,7 +6803,6 @@ class Pages extends CI_Controller
                 'topic' => $topic,
                 'images' => $images
             ]);
-
         } catch (Exception $e) {
             log_message('error', 'Get topic data error: ' . $e->getMessage());
             echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการดึงข้อมูล']);
@@ -6935,14 +6923,14 @@ class Pages extends CI_Controller
             // ========================================================================
             // 3. ตรวจสอบคำหยาบ (Vulgar Check)
             // ========================================================================
-// ========================================================================
-// 3. ตรวจสอบคำหยาบ (Vulgar Check) - ANALYSIS & FIX
-// ========================================================================
+            // ========================================================================
+            // 3. ตรวจสอบคำหยาบ (Vulgar Check) - ANALYSIS & FIX
+            // ========================================================================
 
             // 🔍 ปัญหาที่พบ:
-// 1. ใช้ $_POST['q_a_ref_id'] แต่ Model ต้องการ $_POST['q_a_reply_ref_id']
-// 2. การเรียก add_reply_q_a() อาจไม่เข้าถึง vulgar check logic
-// 3. Flash data อาจไม่ถูกตั้งค่าเพราะ Model return เร็ว
+            // 1. ใช้ $_POST['q_a_ref_id'] แต่ Model ต้องการ $_POST['q_a_reply_ref_id']
+            // 2. การเรียก add_reply_q_a() อาจไม่เข้าถึง vulgar check logic
+            // 3. Flash data อาจไม่ถูกตั้งค่าเพราะ Model return เร็ว
 
             log_message('info', 'Starting vulgar content check...');
 
@@ -7398,7 +7386,6 @@ class Pages extends CI_Controller
                 'topic_id' => $topic_id,
                 'timestamp' => date('Y-m-d H:i:s')
             ]);
-
         } catch (Exception $e) {
             log_message('error', 'Update topic exception: ' . $e->getMessage());
             log_message('error', 'Exception trace: ' . $e->getTraceAsString());
@@ -7696,7 +7683,6 @@ class Pages extends CI_Controller
             $result = empty($uploaded_files) ? '' : implode(',', $uploaded_files);
             log_message('info', 'handleImageUploadForUpdate completed. Result: ' . $result);
             return $result;
-
         } catch (Exception $e) {
             log_message('error', 'handleImageUploadForUpdate exception: ' . $e->getMessage());
             log_message('error', 'Stack trace: ' . $e->getTraceAsString());
@@ -7810,7 +7796,6 @@ class Pages extends CI_Controller
             }
 
             return false;
-
         } catch (Exception $e) {
             log_message('error', 'Exception in createTopicUpdateNotification: ' . $e->getMessage());
             return false;
@@ -7870,7 +7855,6 @@ class Pages extends CI_Controller
                 'max_allowed' => 5,
                 'remaining_slots' => max(0, 5 - $existing_images_count)
             ]);
-
         } catch (Exception $e) {
             log_message('error', 'get_existing_images_count exception: ' . $e->getMessage());
             http_response_code(500);
@@ -8039,7 +8023,6 @@ class Pages extends CI_Controller
                 'success' => true,
                 'message' => 'ลบกระทู้สำเร็จ'
             ]);
-
         } catch (Exception $e) {
             log_message('error', 'Delete topic exception: ' . $e->getMessage());
             http_response_code(500);
@@ -8085,7 +8068,6 @@ class Pages extends CI_Controller
                 // Fallback ไปใช้วิธีสร้างโดยตรง
                 return $this->create_delete_notification_direct($topic_id, $topic_title, $deleted_by);
             }
-
         } catch (Exception $e) {
             log_message('error', 'Exception in create_delete_notification_simple: ' . $e->getMessage());
             return $this->create_delete_notification_direct($topic_id, $topic_title, $deleted_by);
@@ -8172,7 +8154,6 @@ class Pages extends CI_Controller
             }
 
             return false;
-
         } catch (Exception $e) {
             log_message('error', 'Exception in create_delete_notification_direct: ' . $e->getMessage());
             return false;
@@ -8341,7 +8322,6 @@ class Pages extends CI_Controller
             log_message('info', 'Pages/find_topic_page Response: ' . json_encode($response));
 
             echo json_encode($response);
-
         } catch (Exception $e) {
             log_message('error', 'Error in Pages/find_topic_page: ' . $e->getMessage());
             log_message('error', 'Exception trace: ' . $e->getTraceAsString());
@@ -8392,7 +8372,6 @@ class Pages extends CI_Controller
             log_message('info', "Topic {$target_topic_id} is at position {$position}, page {$page}");
 
             return $page;
-
         } catch (Exception $e) {
             log_message('error', 'Error in calculateTopicPageFixed: ' . $e->getMessage());
             return 1; // fallback to page 1
@@ -8440,7 +8419,6 @@ class Pages extends CI_Controller
             log_message('info', "Topic {$target_topic_id} is at position {$position}, page {$page}");
 
             return $page;
-
         } catch (Exception $e) {
             log_message('error', 'Error in calculateTopicPage: ' . $e->getMessage());
             return 1; // fallback to page 1
@@ -8900,7 +8878,6 @@ class Pages extends CI_Controller
             log_message('info', '=== CHECK EDIT PERMISSION API END ===');
 
             echo json_encode($response);
-
         } catch (Exception $e) {
             log_message('error', 'Check edit permission API error: ' . $e->getMessage());
             echo json_encode([
@@ -8995,7 +8972,6 @@ class Pages extends CI_Controller
                     'total_processed' => $fixed_topics + $fixed_replies
                 ]
             ]);
-
         } catch (Exception $e) {
             log_message('error', 'Fix overflow data error: ' . $e->getMessage());
             echo json_encode([
@@ -9608,7 +9584,6 @@ class Pages extends CI_Controller
                 'reply_id' => $reply_id,
                 'timestamp' => date('Y-m-d H:i:s')
             ]);
-
         } catch (Exception $e) {
             log_message('error', 'Update reply exception: ' . $e->getMessage());
             log_message('error', 'Exception trace: ' . $e->getTraceAsString());
@@ -9747,7 +9722,6 @@ class Pages extends CI_Controller
                 'success' => true,
                 'message' => 'ลบการตอบกลับสำเร็จ'
             ]);
-
         } catch (Exception $e) {
             log_message('error', 'Delete reply exception: ' . $e->getMessage());
             http_response_code(500);
@@ -9799,7 +9773,6 @@ class Pages extends CI_Controller
                 'can_edit' => $can_edit,
                 'reply_id' => $reply_id
             ]);
-
         } catch (Exception $e) {
             log_message('error', 'Check reply edit permission error: ' . $e->getMessage());
             echo json_encode([
@@ -9887,7 +9860,6 @@ class Pages extends CI_Controller
 
                 $this->db->insert('tbl_notification', $notification_data);
             }
-
         } catch (Exception $e) {
             log_message('error', 'Reply update notification error: ' . $e->getMessage());
         }
@@ -9913,7 +9885,6 @@ class Pages extends CI_Controller
 
                 $this->db->insert('tbl_notification', $notification_data);
             }
-
         } catch (Exception $e) {
             log_message('error', 'Reply delete notification error: ' . $e->getMessage());
         }
@@ -9966,7 +9937,6 @@ class Pages extends CI_Controller
             $parsed['additional_address'] = trim($full_address);
 
             log_message('info', 'Parsed address: ' . json_encode($parsed));
-
         } catch (Exception $e) {
             log_message('error', 'Error parsing address: ' . $e->getMessage());
             $parsed['additional_address'] = $full_address;
@@ -10061,7 +10031,6 @@ class Pages extends CI_Controller
             log_message('info', 'Complain page - Selected Category ID: ' . ($selected_category_id ?? 'none'));
             log_message('info', 'Complain page - Login info: ' . json_encode($login_info));
             log_message('info', 'Complain page - Categories loaded: ' . count($data['complain_categories']));
-
         } catch (Exception $e) {
             log_message('error', 'Error in adding_complain: ' . $e->getMessage());
             $data['complain_categories'] = [];
@@ -10186,7 +10155,6 @@ class Pages extends CI_Controller
                     'user_type_detected' => $user_type_detected,
                     'library_user_type' => $library_user_type
                 ]);
-
             } else if (!$dev_mode) {
                 // *** ไม่มี reCAPTCHA token ***
                 log_message('debug', 'No reCAPTCHA token provided');
@@ -10361,7 +10329,6 @@ class Pages extends CI_Controller
                     'is_anonymous' => $is_anonymous,
                     'recaptcha_verified' => !$dev_mode
                 ], JSON_UNESCAPED_UNICODE);
-
             } else {
                 log_message('error', "❌ Failed to save complain");
 
@@ -10371,7 +10338,6 @@ class Pages extends CI_Controller
                     'message' => 'เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้ง'
                 ], JSON_UNESCAPED_UNICODE);
             }
-
         } catch (Exception $e) {
             log_message('error', "❌ Exception in add_complain: " . $e->getMessage());
 
@@ -10481,7 +10447,6 @@ class Pages extends CI_Controller
                 } else {
                     log_message('error', 'reCAPTCHA library not loaded');
                 }
-
             } catch (Exception $e) {
                 log_message('error', 'reCAPTCHA verification error: ' . $e->getMessage());
 
@@ -10584,7 +10549,6 @@ class Pages extends CI_Controller
                 if (!empty($related_notifications)) {
                     log_message('info', "Marked " . count($related_notifications) . " notifications as read for complain ID: {$complain_id}");
                 }
-
             } catch (Exception $e) {
                 log_message('error', "Error marking notifications as read: " . $e->getMessage());
             }
@@ -10640,7 +10604,6 @@ class Pages extends CI_Controller
                 log_message('debug', "Category not found for ID: {$category_id}, using default");
                 return 'อื่นๆ';
             }
-
         } catch (Exception $e) {
             log_message('error', 'Error in get_category_name: ' . $e->getMessage());
             return 'อื่นๆ';
@@ -10690,7 +10653,6 @@ class Pages extends CI_Controller
                         'address_source' => $login_info['user_address']['source'] ?? 'none'
                     ]
                 ], JSON_UNESCAPED_UNICODE));
-
         } catch (Exception $e) {
             log_message('error', 'Error in get_user_detailed_address: ' . $e->getMessage());
 
@@ -10786,7 +10748,6 @@ class Pages extends CI_Controller
                     }
                 }
             }
-
         } catch (Exception $e) {
             log_message('error', '❌ Error in get_user_login_info: ' . $e->getMessage());
         }
@@ -10827,7 +10788,6 @@ class Pages extends CI_Controller
                             log_message('info', '✅ Found address for public user: ' . $user_id);
                         }
                     }
-
                 } elseif ($login_info['user_type'] === 'staff') {
                     // ดึงข้อมูลจาก tbl_member (staff)
                     $user_id = $login_info['user_info']['m_id'] ?? null;
@@ -10854,10 +10814,8 @@ class Pages extends CI_Controller
 
                             log_message('info', '✅ Found detailed address for public user: ' . $user_id);
                         }
-
                     }
                 }
-
             } catch (Exception $e) {
                 log_message('error', '❌ Error fetching user address: ' . $e->getMessage());
             }
@@ -10889,7 +10847,6 @@ class Pages extends CI_Controller
                         'has_address' => !empty($login_info['user_address'])
                     ]
                 ], JSON_UNESCAPED_UNICODE));
-
         } catch (Exception $e) {
             log_message('error', 'Error in get_user_address: ' . $e->getMessage());
 
@@ -10955,7 +10912,6 @@ class Pages extends CI_Controller
                         'anonymous_location_stats' => $anonymous_location_stats
                     ]
                 ], JSON_UNESCAPED_UNICODE));
-
         } catch (Exception $e) {
             log_message('error', 'Error in get_complain_statistics: ' . $e->getMessage());
 
@@ -11000,7 +10956,6 @@ class Pages extends CI_Controller
                     'data' => $anonymous_complains,
                     'count' => count($anonymous_complains)
                 ], JSON_UNESCAPED_UNICODE));
-
         } catch (Exception $e) {
             log_message('error', 'Error in get_anonymous_complains: ' . $e->getMessage());
 
@@ -11032,7 +10987,6 @@ class Pages extends CI_Controller
                     'success' => true,
                     'login_info' => $login_info
                 ], JSON_UNESCAPED_UNICODE));
-
         } catch (Exception $e) {
             log_message('error', 'Error in get_current_user_info: ' . $e->getMessage());
 
@@ -11097,7 +11051,6 @@ class Pages extends CI_Controller
                     'complain_data' => $complain_data,
                     'complain_details' => $complain_details
                 ], JSON_UNESCAPED_UNICODE));
-
         } catch (Exception $e) {
             log_message('error', 'Error in check_complain_status: ' . $e->getMessage());
 
@@ -11167,7 +11120,6 @@ class Pages extends CI_Controller
                             log_message('info', '✅ Found detailed address for public user: ' . $user_id);
                         }
                     }
-
                 } elseif ($login_info['user_type'] === 'staff') {
                     // ดึงข้อมูลจาก tbl_member (staff)
                     $user_id = $login_info['user_info']['m_id'] ?? null;
@@ -11194,7 +11146,6 @@ class Pages extends CI_Controller
                         }
                     }
                 }
-
             } catch (Exception $e) {
                 log_message('error', '❌ Error fetching user address: ' . $e->getMessage());
             }
@@ -11984,6 +11935,36 @@ class Pages extends CI_Controller
         $this->load->view('frontend_asset/home_calendar');
         $this->load->view('frontend_templat/footer');
     }
+
+    public function procurement_tbl_all_search()
+    {
+        $selectedOption = 'procurement_tbl_all_search';
+        $this->session->set_userdata('selected_option', $selectedOption);
+
+        $search = $this->input->post('search');
+        $start_date = $this->input->post('start_date');
+        $end_date = $this->input->post('end_date');
+
+        // ถ้ามีคำค้นหาหรือมีวันที่เริ่มต้น-สิ้นสุดที่กรอก
+        if (!empty($search) || (!empty($start_date) && !empty($end_date))) {
+            $data['query'] = $this->procurement_egp_model->search_all_tables($search, $start_date, $end_date);
+        } else {
+            // ถ้าไม่มีคำค้นหา และไม่มีวันที่เริ่มต้น-สิ้นสุดที่กรอก ดึงข้อมูลทั้งหมด
+            $data['query'] = $this->procurement_egp_model->get_all_tables();
+        }
+
+        // ส่งค่าที่เลือกไปยัง View
+        $data['selected_option'] = $selectedOption;
+
+        $this->load->view('frontend_templat/header');
+        $this->load->view('frontend_asset/css');
+        $this->load->view('frontend_templat/navbar_other');
+        $this->load->view('frontend/procurement_egp', $data);
+        $this->load->view('frontend_asset/js');
+        $this->load->view('frontend_asset/home_calendar');
+        $this->load->view('frontend_templat/footer');
+    }
+
     public function procurement_tbl_w0_search()
     {
 
@@ -12313,5 +12294,4 @@ class Pages extends CI_Controller
             echo "<pre>" . print_r($result, true) . "</pre>";
         }
     }
-
 }

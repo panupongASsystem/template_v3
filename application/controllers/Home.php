@@ -6,7 +6,7 @@ class Home extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		
+
 		// ป้องกันการแคชและการคัดลอกเนื้อหา
 		$this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate');
 		$this->output->set_header('Cache-Control: post-check=0, pre-check=0, max-age=0');
@@ -32,7 +32,7 @@ class Home extends CI_Controller
 
 		// กำหนดเวลาหมดอายุของหน้าเว็บ
 		$this->output->set_header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
-		
+
 		$this->load->model('important_day_model');
 		$this->load->model('HotNews_model');
 		$this->load->model('Vision_model');
@@ -65,7 +65,7 @@ class Home extends CI_Controller
 		$this->load->model('prov_local_doc_model');
 		$this->load->model('procurement_egp_model');
 		$this->load->model('intra_egp_model');
-		
+
 		$this->load->model('cmi_model');
 		$this->load->model('e_mag_model');
 		$this->load->model('lineoa_qrcode_model');
@@ -86,6 +86,7 @@ class Home extends CI_Controller
 
 		// ดึงข้อมูลวิดีโอล่าสุด
 		$data['latest_video'] = $this->video_model->get_latest_video();
+		$data['latest_video_one'] = $this->video_model->get_latest_video_one();
 		$data['manual_esv'] = $this->manual_esv_model->read(1);
 
 		if (isset($data['qE_mag'])) {
@@ -193,7 +194,7 @@ class Home extends CI_Controller
 		$data['qBackground_personnel'] = $this->background_personnel_model->background_personnel_frontend();
 		$data['qCalender'] = $this->calender_model->calender_frontend();
 		$data['qActivity'] = $this->activity_model->activity_frontend();
-		
+
 		// 🆕 ตรวจสอบแหล่งข้อมูลประชากร
 		$ci_data_source = get_config_value('ci_data_source') ?: 'manual';
 		$data['ci_data_source'] = $ci_data_source;
@@ -246,7 +247,7 @@ class Home extends CI_Controller
 		return $data;
 	}
 
-		// 🆕 ฟังก์ชันเรียกข้อมูลประชากรจาก API (ย้อนหลัง 1 เดือน)
+	// 🆕 ฟังก์ชันเรียกข้อมูลประชากรจาก API (ย้อนหลัง 1 เดือน)
 	private function get_population_from_api()
 	{
 		log_message('info', '=== START get_population_from_api ===');
@@ -492,7 +493,7 @@ class Home extends CI_Controller
 
 		return $name1 === $name2;
 	}
-	
+
 	private function loadApiData()
 	{
 		// // URL of the Open API
@@ -674,25 +675,26 @@ class Home extends CI_Controller
 		// Return the array of documents
 		return $documents;
 	}
-	
-	
-	public function check_session() {
-    if (!$this->input->is_ajax_request()) {
-        show_404();
-       return;
-   }
-    
-  $this->output->set_content_type('application/json');
-   $this->output->set_header('Cache-Control: no-cache');
-    
-   $is_logged_in = (
-       ($this->session->userdata('mp_id') && !empty($this->session->userdata('mp_id'))) ||
-      ($this->session->userdata('m_id') && !empty($this->session->userdata('m_id')))
-  );
-    
-  $this->output->set_output(json_encode(['is_logged_in' => $is_logged_in]));
-    }
-	
+
+
+	public function check_session()
+	{
+		if (!$this->input->is_ajax_request()) {
+			show_404();
+			return;
+		}
+
+		$this->output->set_content_type('application/json');
+		$this->output->set_header('Cache-Control: no-cache');
+
+		$is_logged_in = (
+			($this->session->userdata('mp_id') && !empty($this->session->userdata('mp_id'))) ||
+			($this->session->userdata('m_id') && !empty($this->session->userdata('m_id')))
+		);
+
+		$this->output->set_output(json_encode(['is_logged_in' => $is_logged_in]));
+	}
+
 	private function get_province_links()
 	{
 		$province_name = get_config_value('province');
@@ -761,7 +763,7 @@ class Home extends CI_Controller
 
 		return $links;
 	}
-	
+
 	private function get_dla_links()
 	{
 		$url = "https://addr.assystem.co.th/index.php/api_dla_links/links";
@@ -863,7 +865,7 @@ class Home extends CI_Controller
 		readfile($file_path);
 		exit;
 	}
-	
+
 	private function getProvLocalDocFromAPI($limit = 13)
 	{
 		$province = get_config_value('province');

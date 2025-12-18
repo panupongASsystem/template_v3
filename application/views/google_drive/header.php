@@ -29,6 +29,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+	<meta name="google-site-verification" content="w2TuDX5ngu3fpyZeIa93ENLpq6VEfAAaxMT-5PyrP5w" />
 </head>
 <body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
 
@@ -44,7 +45,7 @@
                     <div>
                         <div class="flex items-center space-x-3">
                             <h1 class="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-                                Google Drive
+                                Drive Integration
                             </h1>
                             <?php if (isset($is_trial_mode) && $is_trial_mode): ?>
                                 <span class="trial-badge">

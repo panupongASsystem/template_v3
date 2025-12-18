@@ -1,5 +1,5 @@
 <div class="text-center pages-head">
-    <span class="font-pages-head">ประกาศจัดซื้อจัดจ้าง</span>
+    <span class="font-pages-head">ประกาศราคากลาง</span>
 </div>
 </div>
 <img src="<?php echo base_url('docs/welcome-btm-light-other.png'); ?>">
