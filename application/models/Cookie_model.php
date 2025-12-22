@@ -8,23 +8,15 @@ class Cookie_model extends CI_Model
     /**
      * บันทึกการยอมรับ cookie (เก็บใน tbl_cookie_logs)
      */
-    public function save_consent($data)
+    public function save_consent($log_data)
     {
         try {
-            // เก็บลง tbl_cookie_logs แทน tbl_cookie
-            $consent_log = [
-                'ip_address' => $data['ip_address'],
-                'fingerprint' => isset($data['fingerprint']) ? $data['fingerprint'] : null,
-                'user_agent' => $data['user_agent'],
-                'session_id' => $data['session_id'],
-                'payload' => json_encode($data), // เก็บข้อมูลทั้งหมดเป็น JSON
-                'reason' => 'Cookie consent accepted',
-                'log_type' => 'access',
-                'is_blocked' => 0,
-                'created_at' => date('Y-m-d H:i:s')
-            ];
+            // เพิ่ม created_at ถ้ายังไม่มี
+            if (!isset($log_data['created_at'])) {
+                $log_data['created_at'] = date('Y-m-d H:i:s');
+            }
 
-            $result = $this->db->insert($this->log_table, $consent_log);
+            $result = $this->db->insert($this->log_table, $log_data);
 
             if (!$result) {
                 log_message('error', 'Cookie save error: ' . print_r($this->db->error(), true));
@@ -140,12 +132,10 @@ class Cookie_model extends CI_Model
                 return false;
             }
 
-            // ไม่ต้อง log_access ซ้ำเพราะ save_consent จะบันทึกอยู่แล้ว
-
             return true;
         } catch (Exception $e) {
             log_message('error', 'Check rate limit error: ' . $e->getMessage());
-            return true; // ถ้า error ให้ผ่านไป
+            return true;
         }
     }
 
@@ -194,7 +184,7 @@ class Cookie_model extends CI_Model
                 'fingerprint' => isset($data['fingerprint']) ? $data['fingerprint'] : null,
                 'user_agent' => $data['user_agent'],
                 'session_id' => isset($data['session_id']) ? $data['session_id'] : null,
-                'payload' => isset($data['payload']) ? $data['payload'] : '',
+                'payload' => isset($data['payload']) ? $data['payload'] : '', // ไม่ต้อง encode ซ้ำ เพราะมันเป็น string แล้ว
                 'reason' => $data['reason'],
                 'log_type' => 'suspicious',
                 'is_blocked' => 0,
@@ -202,7 +192,7 @@ class Cookie_model extends CI_Model
             ];
 
             $this->db->insert($this->log_table, $log_data);
-            log_message('error', 'Suspicious activity: ' . json_encode($log_data));
+            log_message('error', 'Suspicious activity: ' . json_encode($log_data, JSON_UNESCAPED_UNICODE));
         } catch (Exception $e) {
             log_message('error', 'Log suspicious error: ' . $e->getMessage());
         }

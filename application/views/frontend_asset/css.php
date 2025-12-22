@@ -8159,6 +8159,7 @@ $mourning_ribbon_enabled = get_config_value('mourning_ribbon_enabled') ?? '0';
   .font-wel-g2-visit-content {
     color: #4A0D49;
     text-align: center;
+    white-space: nowrap;
     text-shadow: 1px 1px 0 #fff,
       -1px -1px 0 #fff,
       1px -1px 0 #fff,
@@ -8177,6 +8178,7 @@ $mourning_ribbon_enabled = get_config_value('mourning_ribbon_enabled') ?? '0';
   .font-wel-g2-visit-content2 {
     color: #4A0D49;
     text-align: center;
+    white-space: nowrap;
     font-family: "Noto Music", "Noto Sans Thai", Arial, sans-serif;
     font-size: 24px;
     font-style: normal;
